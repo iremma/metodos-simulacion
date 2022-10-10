@@ -1,3 +1,3 @@
 \contentsline {section}{Ejercicio 1}{2}{section*.2}%
-\contentsline {section}{Ejercicio 2}{5}{section*.3}%
-\contentsline {section}{Bibliografía}{6}{section*.4}%
+\contentsline {section}{Ejercicio 2}{4}{section*.5}%
+\contentsline {section}{Bibliografía}{6}{section*.7}%

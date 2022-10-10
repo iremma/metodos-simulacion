@@ -21,9 +21,11 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{segundo-articulo}
+\bibitem{monty-python}
 \BIBentryALTinterwordspacing
- [Online]. Available: \url{https://dl.acm.org/doi/pdf/10.1145/292395.292453}
+G.~Marsaglia and W.~W. Tsang, ``The monty python method for generating random
+  variables,'' vol.~24, no.~3, p. 341–350, sep 1998. [Online]. Available:
+  \url{https://dl.acm.org/doi/pdf/10.1145/292395.292453}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}
