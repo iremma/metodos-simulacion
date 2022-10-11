@@ -45,12 +45,10 @@
 	\addcontentsline{toc}{section}{Ejercicio 1}
 	\textbf{Generación de números y variables aleatorias.} Describir el método \textit{Monty Phyton} para la distribución normal y compararlo con otros métodos para lageneración de valores de la normal.
 	
-	El objetivo del método Monty Python es lograr generar números aleatorios cuya frecuencia se aproxime a aquella de una distribución normal. Para ello, emplea la expresión de la función de densidad de la distribución normal como una sigmoide decreciente, y la simpleza computacional de la generación de números aleatorios en un rectángulo.
+	El objetivo del método Monty Python es lograr generar números aleatorios cuya frecuencia se aproxime a aquella de una distribución normal. Para ello, emplea la similitud entre la expresión de la función de densidad de la distribución normal y una sigmoide decreciente, así como se aprovecha del bajo coste computacional de la generación de números aleatorios en un rectángulo.
+	$$ N(0,1) \sim f(x) = \dfrac{1}{\sqrt{2\pi}} \cdot e^{-x^2/2} $$
 	
-	$$ N(0,1) \equiv f(x) = \dfrac{1}{\sqrt{2\pi}} \cdot e^{-x^2/2} $$
-	
-	
-	Tomando $x>0$, se traza un rectángulo de base $b$ y altura $1/b$ sobre la sigmoide. Realizando un giro de $\pi$ radianes y un desplazamiento sobre la región exterior al rectángulo, se pretende representar la mayor superficie posible de la sigmoide en el interior del rectángulo de área $1$. En las imágenes siguientes, podemos observar el procedimiento descrito tomando un $b=2.29$
+	Tomando $x>0$, se traza un rectángulo de base $b$ y altura $1/b$ sobre la sigmoide. Con un giro de $\pi$ radianes y un desplazamiento sobre la región exterior al rectángulo se pretende representar la mayor superficie posible de la sigmoide en el interior del rectángulo de área $1$. En las imágenes siguientes, podemos observar el procedimiento descrito tomando un $b=2.29$
 	
 	\begin{figure}[H]
 		\begin{subfigure}{.5\textwidth}
@@ -61,11 +59,11 @@
 		\begin{subfigure}{.5\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{include/rotating_sigmoid.png}
-			\caption{Descripción gráfica del giro descrito. \cite{monty-python}}
+			\caption{Giro y desplazamiento gráficamente. \cite{monty-python}}
 		\end{subfigure}
 	\end{figure}
 	
-	Una vez descrito el área bajo la función de densidad de la sigmoide en el interior del rectángulo, todo número aleatorio generado en ese rectángulo pertenecerá a las regiones $F$, $G$, $H$ o a la región comprendida entre $G$ y $H$ correspondiente a la cola de la sigmoide. La probabilidad de obtener un número en la cola es de un $0.022$.
+	Una vez descrito el área bajo la función de densidad de la sigmoide en el interior del rectángulo, todo número aleatorio generado en ese rectángulo pertenecerá a las regiones $F$, $G$, $H$ o a la región comprendida entre $G$ y $H$ correspondiente a la cola de la sigmoide. La probabilidad de obtener un número en la cola es de un $0.022$ \cite{monty-python}.
 	
 	Entonces, siendo $(x,y)$ el valor aleatorio generado y $(x',y')$ su valor correspondiente en la sigmoide, se tiene
 	$$
