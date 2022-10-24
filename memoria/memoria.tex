@@ -94,44 +94,60 @@
 	
 \newpage
 	\subsection{Comparación de métodos}
-	A continuación, se compararán diferentes métodos para la generación de valores de la normal con el método Monty Python. Para ello, nos basaremos en la publicación citada \cite{comparacion-metodos}. Esta misma, divide la evaluación en:
+	A continuación, se compararán diferentes métodos para la generación de valores de la normal con el método Monty Python. Para ello, nos basaremos en la publicación citada \cite{comparacion-metodos}. Teniendo en cuenta que tanto el método generador de las secciones $F$, $G$ y $H$, como el método generador de las colas de la sigmoide son relevantes, el artículo divide la evaluación en cuatro secciones.
 	
 	\begin{itemize}
-		\item \textbf{Test de bondad del ajuste}: Para evaluar los algoritmos utilizados, se utiliza el test $\chi{2}$. El número de k subintervalos, se utiliza la siguiente formula $k=[n^{\frac{3}{5}}]$, siendo n el número de muestras.
-		\item \textbf{Test para valores altos de sigma} (como se comportan los generadores en las colas): El gran reto de realizar este test es la baja probabilidad de obtener muestras que se encuentren en las colas. Se utiliza por tanto un algoritmo para "forzar" generación de muestras que sean grandes múltiplos de sigma. 
-		\item \textbf{Test de aleatoriedad}: Para este test, se uso la batería Crush, que forma parte del TestU01.
-		\item \textbf{Test de correlación interbloque}: Este test mide como afecta la distribución de cada una de las muestras a la muestra siguiente, siendo un buen resultado si la distribución de cada una de las muestras es independiente de las anteriores.
+		\item Tests de bondad de ajuste. Para evaluar los algoritmos utilizados, se utiliza el test $\chi^{2}$. El número de intervalos en los que se divide la distribución para realizar el test es $k$, que se define mediante la siguiente expresión, siendo $n$ el número de muestras.
+		\vspace{-5mm}
+		$$k = \lceil n^{3/5} \rceil $$
+		
+		\item Test para valores altos de sigma. Este test miden principalmente el comportameinto de los generadores en las colas de la distribución. El principal reto es la baja probabilidad de obtener muestras que se encuentren en las colas. Se utiliza por tanto un algoritmo para "forzar" generación de muestras que sean grandes múltiplos de sigma. 
+		
+		\item Test de aleatoriedad. Para este test, se usó la batería Crush, que forma parte de los \textit{TestU01}.
+		
+		\item Test de correlación interbloque. Este test mide como afecta la distribución de cada una de las muestras a la muestra siguiente, considerándose un buen resultado si la distribución de cada una de las muestras es independiente de las anteriores.
 	\end{itemize}
 	
-	También se evalua el \textbf{número de operaciones realziadas} y \textbf{la velocidad de ejecución}. 
+	También se evalúa el número de operaciones realizadas y la velocidad de ejecución. 
 	
-	\subsubsection{Resultados en velocidad y número de operaciones realizadas.}
+	\subsubsection{Resultados en velocidad.}
+	La velocidad se mide relativa a la velocidad del método de Rechazo Polar. El método Monty Python es el cuarto más rápido en comparación con los $16$ otros métodos de generación de variables aleatorias estudiados \cite{comparacion-metodos}, siendo $1.61$ veces más rápido que el método de Rechazo Polar. Destaca además que el número de operaciones realizadas es bajo en comparación con el método Wallace, que está por encima del método Monty Python en rapidez. Este último tiene también menos cantidad de constantes que el método Ziggurat, que está también por encima del Monty Python en cuestión de velocidad.
 	
-	Los resultados del test de velocidad son relativos a la velicidad del método de Rechazo Polar. El método de Monty Python es el cuarto más rápido en comparación con los 16 otros métodos de generación de variables aleatorias, siendo 1,61 veces más rápido que el método de Rechazo Polar. Destaca a demás que el número de operaciones realizadas es bajo en comparación con el método Wallace, que esta por encima del Monty Python en rapidez. El método Monty Python tiene también muchas menos constantes que el método Ziggurat, que está también por encima del Monty Python en cuestión de velocidad.
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|c||c|}
+			\hline
+			Nombre del método     & Velocidad     \\ \hline \hline
+			Wallace (qual=1)      & 6.41          \\ \hline
+			Ziggurat              & 4.29          \\ \hline
+			Wallace (qual=4)      & 2.48          \\ \hline
+			\textbf{Monty Python} & \textbf{1.61} \\ \hline
+			PPND7                 & 1.16          \\ \hline
+			Mixture-of-triangles  & 1.14          \\ \hline
+			Polar                 & 1.00          \\ \hline   
+		\end{tabular}
+	\end{table}
 	
-	
-	
-	\subsubsection{Resultados en el test de bondad de ajuste.}
-	En el test de $\chi{2}$, se obtiene como resultado que el método Monty Python no pasa el test al utilzar muestras de valores mayores a $2^{34}$. De nuevo, los métodos Wallace y Ziggurat obtienen mejores resultados, ya que no fallan al utilizar muestras de valor igual o mayor a $2^{36}$. El algoritmo PPND7 falla en la misma prueba que el método Monty Python, pero este algorimto a demás es 3 veces más lento.
-	
+	\subsubsection{Resultados en el test de bondad de ajuste $\chi^{2}$.}
+	En el test de bondad de ajuste $\chi^{2}$, el método Monty Python no pasa el test al utilizar muestras de valores mayores a $2^{34}$. De nuevo, los métodos Wallace y Ziggurat obtienen mejores resultados, ya que no fallan al utilizar muestras de valor igual o mayor a $2^{36}$. El algoritmo PPND7 falla en la misma prueba que el método Monty Python, pero este algorimto además es $3$ veces más lento.
 	
 	\subsubsection{Resultados en el test de valores altos de sigma.}
-	Los resultados de este test muestran el múltiplo más alto de sigma donde el test se realiza con éxito. El método Monty Python obtiene un valor de 8.27, siendo en este caso mejor que los métodos Ziggurat y Wallace. En comparación con el resto de generadores, el Monty Python obtiene muy buenos resultados, situandose el 4 mejor de todos los generadores comparados.
+	Los resultados de este test muestran el múltiplo más alto de sigma donde el test se realiza con éxito. El método Monty Python obtiene un valor de $8.27$, siendo en este caso mejor que los métodos Ziggurat y Wallace. En comparación con el resto de generadores, el Monty Python obtiene muy buenos resultados, situándose el cuarto mejor de todos los generadores comparados.
 	
 	\subsubsection{Resultados del test de aleatoriedad}
 	El generador Monty Python no tuvo fallos al realizarse el test Crush.
 	
 	\subsubsection{Resultados del test de correlación interbloque.}
-	Este test solo se realizó en los generadores Ziggurat, Wallace y Monty Pythhon, dado que fueron los más rápidos y en este test se necesitan realizar pruebas con muestras muy grandes. Los generadores de Ziggurat y Monty Python pasaron todos los tests con éxito, mientras que el generador Wallace (tanto el de baja calidad como el de alta), falla cuando las iteraciones están por debajo de 8. Esto se debe a que el método Wallace es recursivo.
-	
+	Este test solo se realizó en los generadores Ziggurat, Wallace y Monty Pythhon, dado que fueron los más rápidos y en este test se necesitan realizar pruebas con muestras muy grandes. Los generadores de Ziggurat y Monty Python pasaron todos los tests con éxito, mientras que el generador Wallace (tanto el de baja calidad como el de alta), falla cuando las iteraciones están por debajo de $8$. Esto se debe a que el método Wallace es recursivo.
 	
 	\subsubsection{Conclusiones}
-	
 	Si bien es cierto que el método Wallace es el más rápido, presenta desventajas evidentes como la correlación. 
 	El método Ziggurat, que es más lento que el Wallace, no tiene problemas de correlación, pero si que falla en el test Crush con una colisión identificada en los tests de doble precisión. 
-	Además, utiliza un total de 388 constantes, lo que puede ser problemático en algunos entornos. 
+	Además, utiliza un total de $388$ constantes, lo que puede ser problemático en algunos entornos. 
 	El método Monty Python es el tercero más rápido después del Wallace y el Ziggurat, y presenta ventajas evidentes, como los buenos resultados en los tests de aleatoriedad y correlación, así como el bajo número de operaciones y constantes necesarias. 
-	La limitación del método Monty Python está en el uso de muestras cuya n sea mayor que  $2^{36}$. 
+	La limitación del método Monty Python está en el uso de muestras cuya $n$ sea mayor que  $2^{36}$. 
+	
+	
 	
 	
 	
