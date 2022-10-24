@@ -43,7 +43,8 @@
 \newpage
 	\section*{Ejercicio 1}
 	\addcontentsline{toc}{section}{Ejercicio 1}
-	\textbf{Generación de números y variables aleatorias.} Describir el método \textit{Monty Phyton} para la distribución normal y compararlo con otros métodos para lageneración de valores de la normal.
+	\textbf{Generación de números y variables aleatorias.} Describir el método \textit{Monty Phyton} para la distribución normal y compararlo con otros métodos para la
+generación de valores de la normal.
 	
 	El objetivo del método Monty Python es lograr generar números aleatorios cuya frecuencia se aproxime a aquella de una distribución normal. Para ello, emplea la similitud entre la expresión de la función de densidad de la distribución normal y una sigmoide decreciente, así como se aprovecha del bajo coste computacional de la generación de números aleatorios en un rectángulo.
 	$$ N(0,1) \sim f(x) = \dfrac{1}{\sqrt{2\pi}} \cdot e^{-x^2/2} $$
@@ -63,7 +64,7 @@
 		\end{subfigure}
 	\end{figure}
 	
-	Una vez descrito el área bajo la función de densidad de la sigmoide en el interior del rectángulo, todo número aleatorio generado en ese rectángulo pertenecerá a las regiones $F$, $G$, $H$ o a la región comprendida entre $G$ y $H$ correspondiente a la cola de la sigmoide. La probabilidad de obtener un número en la cola es de un $0.022$ \cite{monty-python}.
+	Una vez descrito el área bajo la función de densidad en el interior del rectángulo, todo número aleatorio generado en ese rectángulo pertenecerá a las regiones $F$, $G$, $H$ o a la región comprendida entre $G$ y $H$ correspondiente a la cola de la sigmoide. La probabilidad de obtener un número en la cola es de un $0.022$ \cite{monty-python}.
 	
 	Entonces, siendo $(x,y)$ el valor aleatorio generado y $(x',y')$ su valor correspondiente en la sigmoide, se tiene
 	$$
@@ -99,7 +100,11 @@
 \newpage
 	\section*{Ejercicio 2}
 	\addcontentsline{toc}{section}{Ejercicio 2}
-	\textbf{Simulación de sucesos discretos y optimización.} Consideremos un almacén de dos productos cuyos precios de venta al público son de $2.5$ y $3.5$ euros la unidad, respectivamente. La llegada de clientes alalmacén se distribuye según un proceso de Poisson de parámetro $\lambda = 1.5$ clientespor hora y la cantidad de productos demandados por cada uno de ellos tiene lasiguiente distribución:
+	\textbf{Simulación de sucesos discretos y optimización.} Consideremos un almacén de dos productos cuyos precios de venta al público
+ son de $2.5$ y $3.5$ euros la unidad, respectivamente. La llegada de clientes al
+almacén se distribuye según un proceso de Poisson de parámetro $\lambda = 1.5$ clientes
+por hora y la cantidad de productos demandados por cada uno de ellos tiene la
+siguiente distribución:
 	
 	\begin{table}[H]
 		\centering
@@ -111,23 +116,59 @@
 		\end{tabular}
 	\end{table}
 
-	Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decir todos los viernes a primera hora realiza un pedido en el que tomando comoreferencia el nivel de inventario de los productos en ese Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decirtodos los viernes a primera hora realiza un pedido en el que tomando comoreferencia el nivel de inventario de los productos en ese momento, se solicitanlas unidades necesarias para que el nivel del inventario de cada producto lleguea $1000$ y $1500$ unidades, respectivamente en cada producto.
+	Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un
+ stock de productos. La política de pedidos al distribuidor es periódica, es decir
+ todos los viernes a primera hora realiza un pedido en el que tomando como
+referencia el nivel de inventario de los productos en ese Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un
+ stock de productos. La política de pedidos al distribuidor es periódica, es decir
+todos los viernes a primera hora realiza un pedido en el que tomando como
+referencia el nivel de inventario de los productos en ese momento, se solicitan
+las unidades necesarias para que el nivel del inventario de cada producto llegue
+a $1000$ y $1500$ unidades, respectivamente en cada producto.
+
 	
-	Asociado a cada pedido que realizamos al proveedor existe un coste fijo (costede preparación) de $100$ euros, independientemente de las unidadesdemandadas. Adicionalmente, el coste por unidad incluida en el pedido depende de la cantidad solicitada habiendo descuentos por cantidad. Si el número deunidades demandadas del primer producto es menor o igual a $600$ el precio esde $1$ euro la unidad, mientras que si se piden más de $600$ el precio desciende a$75$ céntimos. Para el segundo producto, si el número de unidades demandadases menor que $800$ el precio es de $1.5$ euros la unidad, mientras que si se pidenmás de $800$ el precio desciende a $1.25$ euros.
+	Asociado a cada pedido que realizamos al proveedor existe un coste fijo (coste
+de preparación) de $100$ euros, independientemente de las unidades
+demandadas. Adicionalmente, el coste por unidad incluida en el pedido depende de la cantidad solicitada habiendo descuentos por cantidad. Si el número de
+unidades demandadas del primer producto es menor o igual a $600$ el precio es
+de $1$ euro la unidad, mientras que si se piden más de $600$ el precio desciende a
+$75$ céntimos. Para el segundo producto, si el número de unidades demandadas
+es menor que $800$ el precio es de $1.5$ euros la unidad, mientras que si se piden
+más de $800$ el precio desciende a $1.25$ euros.
 	
-	El tiempo que tarda en ser servido el pedido por los proveedores (tiempo líder),sigue una distribución normal de media 48 horas y desviación típica $3.5$,pagándose en ese momento.
+	El tiempo que tarda en ser servido el pedido por los proveedores (tiempo líder),
+sigue una distribución normal de media 48 horas y desviación típica $3.5$,
+pagándose en ese momento.
 	
-	Se ha llegado a un acuerdo con el proveedor de forma que, tomando comoreferencia las $48$ horas que tarda en media un pedido en ser servido, si el pedidollega con $3$ horas de retraso en la entrega del mismo se realiza un descuento del $0.03\%$ del valor del pedido, encareciéndose en la misma cantidad en el caso deque el pedido llegue con al menos $3$ horas de adelanto.
+	Se ha llegado a un acuerdo con el proveedor de forma que, tomando como
+referencia las $48$ horas que tarda en media un pedido en ser servido, si el pedido
+llega con $3$ horas de retraso en la entrega del mismo se realiza un descuento del $0.03\%$ del valor del pedido, encareciéndose en la misma cantidad en el caso de
+que el pedido llegue con al menos $3$ horas de adelanto.
+
 	
-	El dueño del almacén debe pagar $0.0002$ euros por unidad del producto yunidad de tiempo, asociado al almacenamiento físico de los productos (alquilerdel local, refrigeración...).En el caso de que al llegar un cliente éste solicite una cantidad mayor que la quehay en inventario, se le sirve lo que queda, perdiendo la venta restante.
+	El dueño del almacén debe pagar $0.0002$ euros por unidad del producto y
+unidad de tiempo, asociado al almacenamiento físico de los productos (alquiler
+del local, refrigeración...).
+En el caso de que al llegar un cliente éste solicite una cantidad mayor que la que
+hay en inventario, se le sirve lo que queda, perdiendo la venta restante.
 	
 	\begin{enumerate}
-		\item[a)] Simular el comportamiento de almacén durante un periodo de tiempo de $5$meses para estimar el beneficio esperado, la proporción de clientes cuyademanda se satisface completamente y el porcentaje de tiempo que el nivel delinventario permanece a cero. Para ello, supondremos que el nivel del inventarioinicial es de $70$ unidades de ambos productos.
-		\item[b)] Representar gráficamente la evolución del nivel del inventario durante los $5$meses y durante los $5$ primeros días.
-		\item[c)] Mediante el uso de la metaheurística recocido simulado identificar cuál será lapolítica de pedidos óptima, es decir, identificar cada cuánto tiempo se deberíanrealizar los pedidos y el valor de referencia del inventario para identificar elnúmero de unidades a solicitar en la política de pedidos periódica.
+		\item[a)] Simular el comportamiento de almacén durante un periodo de tiempo de $5$
+meses para estimar el beneficio esperado, la proporción de clientes cuya
+demanda se satisface completamente y el porcentaje de tiempo que el nivel del
+inventario permanece a cero. Para ello, supondremos que el nivel del inventario
+inicial es de $70$ unidades de ambos productos.
+		\item[b)] Representar gráficamente la evolución del nivel del inventario durante los $5$
+meses y durante los $5$ primeros días.
+		\item[c)] Mediante el uso de la metaheurística recocido simulado identificar cuál será la
+política de pedidos óptima, es decir, identificar cada cuánto tiempo se deberían
+realizar los pedidos y el valor de referencia del inventario para identificar el
+número de unidades a solicitar en la política de pedidos periódica.
 	\end{enumerate}
 
-	\textbf{Nota.} El almacén permanece abierto las $24$ horas al día de lunes a domingo. Elproveedor y la empresa transportista (que sirve los pedidos) también trabajanlas $24$ horas, no cerrando en ningún momento.
+	\textbf{Nota.} El almacén permanece abierto las $24$ horas al día de lunes a domingo. El
+proveedor y la empresa transportista (que sirve los pedidos) también trabajan
+las $24$ horas, no cerrando en ningún momento.
 	
 	
 	
