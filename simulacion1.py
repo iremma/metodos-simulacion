@@ -74,8 +74,8 @@ def rutina_llegada_cliente(ts):
   t_real = ts
   
   #Generamos demanda del cliente
-  demanda_1 = np.random.choice(demanda, 1, p=probab_1)
-  demanda_2 = np.random.choice(demanda, 1, p=probab_2)
+  demanda_1 = np.random.choice(demanda, 1, p=probab_1)[0]
+  demanda_2 = np.random.choice(demanda, 1, p=probab_2)[0]
   
   print("------------------------------------------------------------")
   print(f"Llega nuevo cliente\n  - demanda producto 1: {demanda_1}\n  - demanda producto 2: {demanda_2}")
@@ -106,8 +106,7 @@ def rutina_llegada_cliente(ts):
     var_aux = t_real
     
   #Generamos el tiempo que tarda en llegar el siguiente cliente
-  y_lst = stats.poisson.rvs(lambda_poisson, size=1) 
-  Y = y_lst[0] # pq es una lista de size 1
+  Y = stats.poisson.rvs(lambda_poisson, size=1)[0] 
   
   # si el cliente llega antes de acabar la simulacion, se simula
   if Y+t_real < T_simulacion:
@@ -191,7 +190,7 @@ def rutina_compra_pedido(ts):
   y_2 = P2 - x_2
 
   #Generamos cuanto va a tardar en llegar el pedido
-  L = np.random.normal(mu, sigma, 1)
+  L = np.random.normal(mu, sigma, 1)[0]
 
   # actualizamos el tiempo de llegada del pedido y el tiempo de siguiente compra
   lista['tp'] = t_real + L if L+t_real < T_simulacion else lista['tp']
@@ -213,8 +212,7 @@ def simul_main():
   print("                          SIMULACION INICIADA                              ")
   print("===========================================================================")
   #Generamos el tiempo que tarda en llegar el primer cliente
-  z_lst = stats.poisson.rvs(lambda_poisson, size=1) 
-  Z = z_lst[0] # pq es una lista de size 1
+  Z = stats.poisson.rvs(lambda_poisson, size=1)[0]
 
   #Si el tiempo si pasa del limite T, la simulación se acaba
   if(Z > T_simulacion): return -1
@@ -245,7 +243,6 @@ def simul_main():
       lista['tp'] = 4000
       print("** Llega un pedido")
       rutina_llegada_pedido(ts)
-
   benef = R-C-H                    #Beneficios
   cl_satisf = Nc / (Nc + Nnc) *100 #Porcentaje de clientes satisfechos
   t0_tot = t0 / T_simulacion       #Tiempo que ha estado el almacen vacio
@@ -253,6 +250,8 @@ def simul_main():
   print("===========================================================================")
   print("                          FIN DE LA SIMULACION                             ")
   print("===========================================================================")
+  print("beneficio->",R,"coste pedidos->",C," coste almacenamiento->",H,"\n")
+  
   print(f"beneficio: {benef}")
   print(f"% clientes satisfechos: {cl_satisf}")
   print(f"tiempo con el almacen vacio: {t0_tot}")
@@ -267,8 +266,8 @@ simul_main()
 
 # PLOT RESULTS
 fig = plt.figure()
-plt.plot(datos_grafica[1][0],datos_grafica[1][1],color='red',label="Producto 1")
-plt.plot(datos_grafica[2][0],datos_grafica[2][1],color='blue',label="Producto 2")
+plt.plot(datos_grafica[1][0],datos_grafica[1][1], color='red', label="Producto 1")
+plt.plot(datos_grafica[2][0],datos_grafica[2][1], color='blue', label="Producto 2")
 plt.legend()
 plt.title(f"Simulacion de {T_simulacion} h")
 fig.savefig("sim.png")
