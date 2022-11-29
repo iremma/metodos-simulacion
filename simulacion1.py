@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 x_1 = 70 #numero de unidades del producto 1
 x_2 = 70 #numero de unidades del producto 2
-T_simulacion = 5
+T_simulacion = 5*24
 #T_simulacion = 5*30*24 #tiempo transcurrido en la simulacion en horas
 Tp = 7*24 #cada cuanto pide
 lista = {'tc': 0,  # tiempo en el que ha llegado un cliente
@@ -266,8 +266,8 @@ simul_main()
 
 # PLOT RESULTS
 fig = plt.figure()
-plt.plot(datos_grafica[1][0],datos_grafica[1][1], color='red', label="Producto 1")
-plt.plot(datos_grafica[2][0],datos_grafica[2][1], color='blue', label="Producto 2")
+plt.plot(datos_grafica[1][0][:-1],datos_grafica[1][1][:-1], color='red', label="Producto 1")
+plt.plot(datos_grafica[2][0][:-1],datos_grafica[2][1][:-1], color='blue', label="Producto 2")
 plt.legend()
 plt.title(f"Simulacion de {T_simulacion} h")
 fig.savefig("sim.png")
