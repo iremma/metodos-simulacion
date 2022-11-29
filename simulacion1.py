@@ -10,7 +10,9 @@ x_1 = 70 #numero de unidades del producto 1
 x_2 = 70 #numero de unidades del producto 2
 T_simulacion = 5*30*24 #tiempo transcurrido en la simulacion en horas
 Tp = 7*24 #cada cuanto pide
-lista = {'tc':0,'tpc':0,'tp':0} #variable donde vamos guardando los tiempos en los que suceden tc y tp
+lista = {'tc': 0,  # tiempo en el que ha llegado un cliente
+         'tpc': 0, # tiempo en el que se ha comprado un pedido
+         'tp': 0}  # tiempo en el que ha llegado un pedido
 R = 0 #beneficio esperado
 P1 = 1000 #numero de unidades max del producto 1
 P2 = 1500 #numero de unidades max del producto 2
@@ -35,13 +37,13 @@ p1_2 = 0.75 # precio si son mas de 600 uds del producto 1
 n_descuent_2 = 800
 p2_1 = 1.5
 p2_2 = 1.25
-penal = 0.0003
 Lref = 48 #tiempo media de llegada del pedido
 lim_penal = 3 #a partir de estas horas de retraso del pedido, penalizacion
+penal = 0.0003 # la penalizacion en el precio si llega tarde/pronto 
 t_real = 0
 var_aux = 0 # instante en el que el almacen se vacia completamnete
 L = 0
-ts = 0
+ts = 0 #tiempo de simulacion
 
 #Vectores para la representación gráfica de los niveles de inventario de los dos tipos de producto a lo largo del tiempo
 
@@ -64,15 +66,15 @@ def rutina_llegada_cliente(ts):
   global H, h, t_real, x_1, x_2, Nc, Nnc, var_aux, R, Y, y_1, y_2
   global r_1, r_2, var_aux, T_simulacion, tiempos_1, tiempos_2
   global niveles_1, niveles_2
-
+  
   #Aumenta el coste de almacenamiento
   H += (ts-t_real)*h*(x_1+x_2)
   t_real = ts
-
+  
   #Generamos demanda del cliente
   demanda_1 = np.random.choice(demanda, 1, p=probab_1)
   demanda_2 = np.random.choice(demanda, 1, p=probab_2)
-
+  
   print("------------------------------------------------------------")
   print(f"Llega nuevo cliente\n  - demanda producto 1: {demanda_1}\n  - demanda producto 2: {demanda_2}")
   print(f"Estado del almacen: x_1:{x_1}, x_2:{x_2} ")
@@ -100,15 +102,15 @@ def rutina_llegada_cliente(ts):
   # Si se ha vaciado del todo (y antes no estaba vacio) guardamos el tiempo actual
   if x_2 == 0 and x_1 == 0 and var_aux == 0 :
     var_aux = t_real
-
+    
   #Generamos el tiempo que tarda en llegar el siguiente cliente
   y_lst = stats.poisson.rvs(lambda_poisson, size=1) 
   Y = y_lst[0] # pq es una lista de size 1
-
+  
   # si el cliente llega antes de acabar la simulacion, se simula
   if Y+t_real < T_simulacion:
     lista['tc'] = t_real+Y 
-
+    
   datos_grafica[1][0].append(t_real)
   datos_grafica[1][1].append(x_1)
   datos_grafica[0][0].append(t_real)
@@ -118,14 +120,13 @@ def rutina_llegada_cliente(ts):
   #niveles_1.append(x_1)
   #tiempos_2.append(t_real)
   #niveles_2.append(x_2)
-
+  
   print(f"tiempo actual: {t_real}")
 
 def rutina_llegada_pedido(ts):
   global H, K, h, t_real, C, t0, var_aux, x_1, x_2, y_1, y_2
   global p1_1, p1_2, p2_1, p2_1, penal, var_aux
   global tiempos_1, tiempos_2, niveles_1, niveles_2
-  
   
   #Aumenta el coste de almacenamiento
   H += (ts-t_real)*h*(x_1+x_2)
@@ -140,44 +141,63 @@ def rutina_llegada_pedido(ts):
   x_2 += y_2
   
   print(f"Estado del almacen (desp.): x_1:{x_1}, x_2:{x_2} ")
-
+  
   #Si son muchas unidades, descuento en el precio
-  Ci_1 = K + y_1 * p1_1 if y_1<n_descuent_1 else K + y_1 * p1_2
-  Ci_2 = K + y_2 * p2_1 if y_2<n_descuent_2 else K + y_2 * p2_2
-
-  #Si llega tarde, penalizacion
-  C += (K+Ci_1+Ci_2)*(1-penal) if L-Lref>lim_penal else (K+Ci_1+Ci_2)*(1+penal)
-
+  Ci_1 = K + y_1 * p1_1 if y_1<=n_descuent_1 else K + y_1 * p1_2
+  Ci_2 = K + y_2 * p2_1 if y_2<=n_descuent_2 else K + y_2 * p2_2
+  
+  #Si llega tarde, penalizacion en el coste total
+  C += (Ci_1+Ci_2)*(1-penal) if L-Lref>lim_penal else (Ci_1+Ci_2)*(1+penal)
+  
+  #Ya no quedan productos por llegar
   y_1 = 0
   y_2 = 0
-
-  tiempos_1.append(t_real)
-  niveles_1.append(x_1)
-  tiempos_2.append(t_real)
-  niveles_2.append(x_2)
-
-  if var_aux>0:
-    t0 +=t_real -var_aux
-    var_aux =0
-  print(t_real)
-
+  
+  datos_grafica[1][0].append(t_real)
+  datos_grafica[1][1].append(x_1)
+  datos_grafica[0][0].append(t_real)
+  datos_grafica[0][1].append(x_2)
+  
+  #tiempos_1.append(t_real)
+  #niveles_1.append(x_1)
+  #tiempos_2.append(t_real)
+  #niveles_2.append(x_2)
+  
+  # Si estaba vacio el invenario (se vacio en el instante var_aux),
+  # aumenta el tiempo que ha estado vacio.
+  if var_aux > 0:
+    t0 += t_real - var_aux
+    var_aux = 0
+  
+  print(f"> El almacen ha estado vacio este tiempo: {t0-t_real} ")
+  print(f"tiempo actual: {t_real}")
 
 def rutina_compra_pedido(ts):
-  print('Comprando al proveedor...')
-  global  H, x_1, x_2, t_real,y_1,y_2, h, t_real, P1,P2, lista, T_simulacion 
-  H +=(ts-t_real)*h*(x_1+x_2)
-  t_real =ts
-  y_1 =P1-x_1
-  y_2 =P2-x_2
-  L = np.random.normal(mu, sigma, 1)
-  if(L+t_real<T_simulacion):
-    lista['tp']=t_real+L
-
-  if(t_real+Tp<T_simulacion):
-    lista['tpc']=t_real+Tp
+  global H, x_1, x_2, t_real, y_1, y_2, h, t_real
+  global P1, P2, lista, T_simulacion
   
-  print(t_real)
+  print("------------------------------------------------------------")
+  print("Realizamos pedido al proveedor")
+  print(f"Estado del almacen: x_1:{x_1}, x_2:{x_2} ")
 
+  # Aumenta el coste de almacenamiento
+  H += (ts-t_real)*h*(x_1+x_2)
+  t_real = ts
+  
+  #Cantidad a pedir es lo que falta para llenar el almacen
+  y_1 = P1 - x_1
+  y_2 = P2 - x_2
+
+  #Generamos cuanto va a tardar en llegar el pedido
+  L = np.random.normal(mu, sigma, 1)
+
+  # actualizamos el tiempo de llegada del pedido y el tiempo de siguiente compra
+  lista['tp'] = t_real + L if L+t_real < T_simulacion else lista['tp']
+  lista['tpc'] = t_real + Tp if t_real+Tp < T_simulacion else lista['tpc']
+  
+  print(f"> El pedido tardara este tiempo: {L} ")
+  print(f"> Se ha pedido: x_1:{y_1} x_2:{y_2} ")
+  print(f"tiempo actual: {t_real}")
 
 def simul_main():
   ts =0
