@@ -11,7 +11,7 @@ x_1 = 70 #numero de unidades del producto 1
 x_2 = 70 #numero de unidades del producto 2
 T_simulacion = 5*24*30
 #T_simulacion = 5*30*24 #tiempo transcurrido en la simulacion en horas
-Tp = 7*24 #cada cuanto pide
+Tp = 7*24 #cada cuanto pide (cada semana)
 lista = {'tc': 0,  # tiempo en el que ha llegado un cliente
          'tpc': 0, # tiempo en el que se ha comprado un pedido
          'tp': 0}  # tiempo en el que ha llegado un pedido
@@ -236,22 +236,20 @@ def simul_main():
     if lista['tc'] <= lista['tpc'] and lista['tc'] <= lista['tp']:
       ts = lista['tc']
       lista['tc'] = 4000
-      #print("** Llega un cliente")
       rutina_llegada_cliente(ts)
 
     #Si el siguiente evento es la compra de un pedido 
     elif(lista['tpc']<=lista['tc'] and lista['tpc']<=lista['tp']):
       ts = lista['tpc']
       lista['tpc'] = 4000
-      #print("** Realizo pedido")
       rutina_compra_pedido(ts)
 
     #Si el siguiente evento es una llegada de pedido
     elif(lista['tp']<=lista['tc'] and lista['tp']<=lista['tpc']):
       ts = lista['tp']
       lista['tp'] = 4000
-      #print("** Llega un pedido")
       rutina_llegada_pedido(ts)
+      
   benef = R - C - H                #Beneficios
   cl_satisf = Nc / (Nc + Nnc) *100 #Porcentaje de clientes satisfechos
   t0_tot = t0 / T_simulacion       #Tiempo que ha estado el almacen vacio
@@ -273,12 +271,21 @@ def simul_main():
 
 simul_main()
 
-# PLOT full  RESULTS
-fig = plt.figure(figsize=(15,15))
+# PLOT full RESULTS
+fig = plt.figure(figsize=(10,10))
 plt.plot(datos_grafica[1][0][:-1],datos_grafica[1][1][:-1], color='red', label="Producto 1")
 plt.plot(datos_grafica[2][0][:-1],datos_grafica[2][1][:-1], color='blue', label="Producto 2")
 plt.legend()
 plt.title(f"Simulacion de {T_simulacion} h")
 fig.savefig("sim.png")
 
-#plt.axis([200, 250, 0, 1000])
+# PLOT first 5 days RESULTS
+len_total = len(datos_grafica[1][0])-1
+len_proporcional = int(len_total/30)
+
+fig = plt.figure(figsize=(10,10))
+plt.plot(datos_grafica[1][0][0:len_proporcional],datos_grafica[1][1][0:len_proporcional], color='red', label="Producto 1")
+plt.plot(datos_grafica[2][0][0:len_proporcional],datos_grafica[2][1][0:len_proporcional], color='blue', label="Producto 2")
+plt.legend()
+plt.title(f"Simulacion de {T_simulacion} h. Primeros instantes.")
+fig.savefig("sim_first.png")
