@@ -24,9 +24,9 @@ t0 = 0 # numero de tiempo que el intervalo esta a cero
 C = 0 #coste total por pedidos
 H = 0 #coste total por almacenamiento
 lambda_poisson = 0.5
-demanda = [1,2,3,4] #posibles demandas del producto
-probab_1 = [0.3,0.4,0.2,0.1] #probabilidades de demanda del producto 1
-probab_2 = [0.2,0.2,0.4,0.2] #probabilidades de demanda del producto 2
+demanda = [1, 2, 3, 4] #posibles demandas del producto
+probab_1 = [0.3, 0.4, 0.2, 0.1] #probabilidades de demanda del producto 1
+probab_2 = [0.2, 0.2, 0.4, 0.2] #probabilidades de demanda del producto 2
 r_1 = 2.5 #coste al publico del producto 1
 r_2 = 3.5 #coste al publico del producto 2
 h = 0.0002 #precio sumado por producto y unidad de tiempo
@@ -267,7 +267,9 @@ simul_main()
 
 # PLOT RESULTS
 fig = plt.figure()
-plt.plot(tiempos_1, niveles_1)
+plt.plot(datos_grafica[1][0],datos_grafica[1][1],color='red',label="Producto 1")
+plt.plot(datos_grafica[2][0],datos_grafica[2][1],color='blue',label="Producto 2")
+plt.legend()
 plt.title(f"Simulacion de {T_simulacion} h")
 fig.savefig("sim.png")
 
