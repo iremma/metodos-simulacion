@@ -149,11 +149,11 @@ def rutina_llegada_pedido(ts):
   
   #Si llega pronto es mas caro, si llega tarde, es mas barato
   if L < Lref-lim_penal:
-    C += (Ci_1+Ci_2)*(1+penal)
+    C += (Ci_1 + Ci_2) * (1 + penal)
   elif L > Lref+lim_penal:
-    C += (Ci_1+Ci_2)*(1-penal)
+    C += (Ci_1 + Ci_2) * (1 - penal)
   else:
-    C += (Ci_1+Ci_2)
+    C += Ci_1 + Ci_2
   
   #Ya no quedan productos por llegar
   y_1 = 0
@@ -198,8 +198,12 @@ def rutina_compra_pedido(ts):
   L = np.random.normal(mu, sigma, 1)[0]
 
   # actualizamos el tiempo de llegada del pedido y el tiempo de siguiente compra
-  lista['tp'] = t_real + L if L+t_real < T_simulacion else lista['tp']
-  lista['tpc'] = t_real + Tp if t_real+Tp < T_simulacion else lista['tpc']
+  if L+t_real < T_simulacion:
+    lista['tp'] = t_real + L
+    
+  if t_real+Tp < T_simulacion:
+    lista['tpc'] = t_real + Tp
+  
   
   print(f"> El pedido tardara este tiempo: {L} ")
   print(f"> Se ha pedido: x_1:{y_1} x_2:{y_2} ")
@@ -226,7 +230,7 @@ def simul_main():
   rutina_llegada_cliente(Z)
   
   #Repetir si siguen llegando clientes o siguen llegando pedidos
-  while lista['tc']!=4000 or lista['tp']!=4000:
+  while (lista['tc']!=4000 or lista['tp']!=4000) and ts <= T_simulacion:
     
     #Si el siguiente evento es la llegada de un cliente
     if lista['tc'] <= lista['tpc'] and lista['tc'] <= lista['tp']:
@@ -236,19 +240,19 @@ def simul_main():
       rutina_llegada_cliente(ts)
 
     #Si el siguiente evento es la compra de un pedido 
-    if(lista['tpc']<=lista['tc'] and lista['tpc']<=lista['tp']):
+    elif(lista['tpc']<=lista['tc'] and lista['tpc']<=lista['tp']):
       ts = lista['tpc']
       lista['tpc'] = 4000
       print("** Realizo pedido")
       rutina_compra_pedido(ts)
 
     #Si el siguiente evento es una llegada de pedido
-    if(lista['tp']<=lista['tc'] and lista['tp']<=lista['tpc']):
+    elif(lista['tp']<=lista['tc'] and lista['tp']<=lista['tpc']):
       ts = lista['tp']
       lista['tp'] = 4000
       print("** Llega un pedido")
       rutina_llegada_pedido(ts)
-  benef = R-C-H                    #Beneficios
+  benef = R - C - H                #Beneficios
   cl_satisf = Nc / (Nc + Nnc) *100 #Porcentaje de clientes satisfechos
   t0_tot = t0 / T_simulacion       #Tiempo que ha estado el almacen vacio
   
