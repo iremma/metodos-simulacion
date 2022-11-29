@@ -39,12 +39,12 @@ p1_2 = 0.75 # precio si son mas de 600 uds del producto 1
 n_descuent_2 = 800
 p2_1 = 1.5
 p2_2 = 1.25
+L = 0 #lo que tarda en llegar el pedido desde que se compra
 Lref = 48 #tiempo media de llegada del pedido
 lim_penal = 3 #a partir de estas horas de retraso del pedido, penalizacion
 penal = 0.0003 # la penalizacion en el precio si llega tarde/pronto 
 t_real = 0
 var_aux = 0 # instante en el que el almacen se vacia completamnete
-L = 0
 ts = 0 #tiempo de simulacion
 
 #Vectores para la representación gráfica de los niveles de inventario de los dos tipos de producto a lo largo del tiempo
@@ -147,8 +147,13 @@ def rutina_llegada_pedido(ts):
   Ci_1 = K + y_1 * p1_1 if y_1<=n_descuent_1 else K + y_1 * p1_2
   Ci_2 = K + y_2 * p2_1 if y_2<=n_descuent_2 else K + y_2 * p2_2
   
-  #Si llega tarde, penalizacion en el coste total
-  C += (Ci_1+Ci_2)*(1-penal) if L-Lref>lim_penal else (Ci_1+Ci_2)*(1+penal)
+  #Si llega pronto es mas caro, si llega tarde, es mas barato
+  if L < Lref-lim_penal:
+    C += (Ci_1+Ci_2)*(1+penal)
+  elif L > Lref+lim_penal:
+    C += (Ci_1+Ci_2)*(1-penal)
+  else:
+    C += (Ci_1+Ci_2)
   
   #Ya no quedan productos por llegar
   y_1 = 0
