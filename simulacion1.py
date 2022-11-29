@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 x_1 = 70 #numero de unidades del producto 1
 x_2 = 70 #numero de unidades del producto 2
-T_simulacion = 5*24
+T_simulacion = 5*24*30
 #T_simulacion = 5*30*24 #tiempo transcurrido en la simulacion en horas
 Tp = 7*24 #cada cuanto pide
 lista = {'tc': 0,  # tiempo en el que ha llegado un cliente
@@ -226,7 +226,7 @@ def simul_main():
   #Si el tiempo si pasa del limite T, la simulación se acaba
   if(Z > T_simulacion): return -1
 
-  print('** Llega el primer cliente')
+  #print('** Llega el primer cliente')
   rutina_llegada_cliente(Z)
   
   #Repetir si siguen llegando clientes o siguen llegando pedidos
@@ -236,21 +236,21 @@ def simul_main():
     if lista['tc'] <= lista['tpc'] and lista['tc'] <= lista['tp']:
       ts = lista['tc']
       lista['tc'] = 4000
-      print("** Llega un cliente")
+      #print("** Llega un cliente")
       rutina_llegada_cliente(ts)
 
     #Si el siguiente evento es la compra de un pedido 
     elif(lista['tpc']<=lista['tc'] and lista['tpc']<=lista['tp']):
       ts = lista['tpc']
       lista['tpc'] = 4000
-      print("** Realizo pedido")
+      #print("** Realizo pedido")
       rutina_compra_pedido(ts)
 
     #Si el siguiente evento es una llegada de pedido
     elif(lista['tp']<=lista['tc'] and lista['tp']<=lista['tpc']):
       ts = lista['tp']
       lista['tp'] = 4000
-      print("** Llega un pedido")
+      #print("** Llega un pedido")
       rutina_llegada_pedido(ts)
   benef = R - C - H                #Beneficios
   cl_satisf = Nc / (Nc + Nnc) *100 #Porcentaje de clientes satisfechos
@@ -273,8 +273,8 @@ def simul_main():
 
 simul_main()
 
-# PLOT RESULTS
-fig = plt.figure()
+# PLOT full  RESULTS
+fig = plt.figure(figsize=(15,15))
 plt.plot(datos_grafica[1][0][:-1],datos_grafica[1][1][:-1], color='red', label="Producto 1")
 plt.plot(datos_grafica[2][0][:-1],datos_grafica[2][1][:-1], color='blue', label="Producto 2")
 plt.legend()
