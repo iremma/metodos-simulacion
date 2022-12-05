@@ -198,14 +198,21 @@
 	\subsection{Modelización del problema}
 	El problema descrito se puede representar según el diagrama a continuación.
 	
-	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\textwidth]{include/modelo_almacen.png}
 		\caption{Representación gráfica del modelado del problema}
 	\end{figure}
 	
-	\hl{explicar la imagen con palabras}\newpage
+	El almacén guarda productos de dos tipos, siendo $x_1$ y $x_2$ la cantidad de cada uno de los productos almacenados en un instante. Los productos se guardan por separado, teniendo una cantidad máxima de cada producto en stock.ç
+	
+	Una de las principales características de este problema es su política de pedidos. Cada $7$ días el propietario realiza un pedido al proveedor, independientemente del estado del almacén durante los días anteriores.
+	
+	La llegada de clientes al sistema sigue una distribución de Poission con $\lambda = 0.5$, mientras que la llegada de pedidos sigue una normal $N(48, 3.5)$.
+	
+	El coste total del sistema se calcula como las ganancias por las ventas de productos ($R$) menos los costes de almacenamiento ($H$) y costes de compra de productos al proveedor ($C$).
+	
+	
 	
 	\subsection{Simulación del problema. Estimación de beneficios y satisfacción de clientes.}
 	Según lo indicado en el apartado a), el objetivo de esta sección es obtener los siguientes valores.
