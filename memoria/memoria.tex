@@ -226,10 +226,80 @@
 	
 	
 	\subsection{Simulación del problema con metaheurísticas. Identificación de política de pedidos óptima.}
+	\subsubsection{Introducción al Recocido Simulado}
+	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización
+	no son lo suficientemente buenos para acoplarse al gran número de factores de decisión y restricciones. Es por ello que se desarrollan las metaheurísticas,
+	dando un paso más alla de las clásicas heurísticas que se centraban únicamente en un tipo de problema, y podían quedarse atrapadas en un mínimo local.
+	//
+	Las metaheurísticas	utilizan conocimiento de distintas areas de la ciencia, como puede ser la inteligencia artificial, la estadística, la genética... para proponer algoritmos que 
+	devuelven una solución eficiente y satisfacctoria de un problema de optimización.//
+	En esta práctica, se nos ha propuesto utilizar la metaheurística del tipo de Búsqueda Global, conocida como Recocido Simulado. Esta metaheurística se basa
+	en el fénomeno de enfriamiento de metales que se estudia en el ámbito de metalurgia y termodinámica. //
+	Para aplicar esta idea a un problema de optimización, se plantean tres principales etapas:
+	\begin{itemize}
+		\item En la primera etapa, las soluciones elegidas del entorno E(x) de manera aleatoria, no tienen porque ser las mejores. Si la solución
+		es mejor que la anterior, cambiamos a esa directamente, pero si es peor, podemos cambiar a ella si la probabilidad supera un umbral determinado por
+		una variable aleatoria. En esta primera fase, la probabilidad de elegir soluciones peores es más alta, evitando así caer en mínimos locales.
+		\item En la segunda etapa, la probabilidad de que elijamos una peor solución ya no es tan grande, pero aun así hay posibilidad de volver atrás.
+		\item En esta última etapa, solo aceptaremos movimientos que mejoren la solución actual.
+	\end{itemize}
 	
+	En este algorimto es muy importante la elección del parámetro Temperatura. Este parámetro, ira decreciendo cada L iteraciones, hasta
+	llegar a una temperatura final u otro punto de parada que se haya especificado. La forma en la que la temperatura influye en la búsqueda del algoritmo es mediante
+	la expresión que define la distribución de Boltzman. 
+	
+	Esta es la distribución que va a tomar la probabilidad de elegir una peor solución, de manera que  si la temperatura es muy alta, la probabilidad de que elijamos una peor solución será mayor.
+	La temperatura decrece según la siguiente expresión: 
+
+	El valor alfa va a determinar cuanto disminuye la temperatura.//
+	En general, los hiperparametros que vamos a tener que controlar para la ejecución del algorimto son los siguientes:
+	\begin{itemize}
+		\item Temperatura inicial
+		\item L iteraciones que deben pasar para actualizar la temperatura
+		\item alfa
+		\item Criterio de parada
+		\item El radio del entorno para elegir una solución vecina
+	\end{itemize}
+	
+	El problema que buscamos resolver en esta práctica con este algorimto es encontrar el valor de periodicidad con el que se deben realaizar los pedidos,
+	así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
 	\subsubsection{Implementación}
+	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido_simulado}, que toma como parámetro un estado inicial, con las variables de 
+	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
+
+	En la primera iteracion, damos a la variable \texttt{current_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
+	Generamos los beneficios utilizando el método \texttt{get_benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
+	"benef" del current_state. Igualamos la variable \texttt{best_state} al current_state.\\
+
+	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno
+	de los más utilizados (referencia a tfm), si bien es cierto que existen otros.\\
+
+	Al entrar en el bucle, utilizamos el método \texttt{get_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método
+	\texttt{get_benef}, obtenemos el beneficio que genera el vecino, y igualamos prob al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. Si la solución es mejor, entonces la variable \texttt{current_state} pasa a ser el estado del vecino.
+	Si la solución es peor, entonces generamos una probabilidad aleatoria utlizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
+	entonces nos quedamos con el \texttt{current_state} actual. Si es menor, entonces acutalziamos current_state al valor del vecino.\\
+
+	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
+	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best_state} es peor que la del estado actual, actualizamos \texttt{best_state}.
+	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
+
+	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best_state}.
+
 	
 	\subsubsection{Resultados}
+	Los mejores resultados se han obtenido al inicializar los hiperparametros identificados previamente a los siguientes valores:
+	\begin{itemize}
+		\item La temperatura incial es de 10000 grados. Probando con valores menores, como 9000, no se alcanzaba el mínimo global.
+		\item La temperatura final es de 0.1 grados
+		\item Alpha es 0.95, siguiendo las recomendaciones.
+		\item El valor de L es de 10 pasos
+		\item El radio del entorno es igual a 1.
+	\end{itemize}
+	Para estos hiperparametros, hemos conseguido un beneficio de 59306.655€, 4291,35€ unidades mayor que el del estado inicial. Cabe destacar que, 
+	al inspeccionar los logs que hemos impreso, el mínimo global se alcanza 150 iteraciones antes del final. Hemos probado a optimizar este
+	resultado alterando el valor de L y la temperatura final, pero ninguna de las dos modificaciones ha dado resultados satisfactorios. A continuación,
+	hemos probado a cambiar la distribución que usamos para obtener vecinos del entorno. Para elegir los vecinos, hemos optado por una normal de radio 1, ya que 
+	al probar con distribuciones uniformes y mayor radio, el algoritmo se quedaba atrapado en minimos locales.
 	
 \newpage
 	\section*{Bibliografía}
