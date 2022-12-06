@@ -13,9 +13,47 @@
 \usepackage{float} % para que las figuras no floten
 \usepackage{subcaption}
 \usepackage{soul}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{listings}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+
+% -- Defining colors:
+\usepackage[dvipsnames]{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Definig a custom style:
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codepurple},
+    keywordstyle=\color{NavyBlue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple}, 
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=t,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% -- Setting 
+\lstset{style=mystyle}
+\setlength{\droptitle}{-6em}
+
 
 \textheight = 24 cm
 \textwidth = 17 cm
+
 
 \renewcommand{\arraystretch}{1.25}
 \renewcommand{\contentsname}{Contenidos}
@@ -331,41 +369,115 @@ las existencias de ambos productos quedando completamente vacío el inventario, 
 	En este algorimto es muy importante la elección del parámetro Temperatura. Este parámetro, ira decreciendo cada L iteraciones, hasta
 	llegar a una temperatura final u otro punto de parada que se haya especificado. La forma en la que la temperatura influye en la búsqueda del algoritmo es mediante
 	la expresión que define la distribución de Boltzman. 
+
+	\begin{equation}
+		p(i)=e^-\frac{f(y)-f(x_i)}{T_i}
+	\end{equation}
 	
 	Esta es la distribución que va a tomar la probabilidad de elegir una peor solución, de manera que  si la temperatura es muy alta, la probabilidad de que elijamos una peor solución será mayor.
 	La temperatura decrece según la siguiente expresión: 
+	\begin{equation}
+		T_{hL}=\alpha ^h T_1
+	\end{equation}
 
 	El valor alfa va a determinar cuanto disminuye la temperatura.//
 	En general, los hiperparametros que vamos a tener que controlar para la ejecución del algorimto son los siguientes:
 	\begin{itemize}
 		\item Temperatura inicial
 		\item L iteraciones que deben pasar para actualizar la temperatura
-		\item alfa
+		\item \alpha
 		\item Criterio de parada
 		\item El radio del entorno para elegir una solución vecina
 	\end{itemize}
 	
 	El problema que buscamos resolver en esta práctica con este algorimto es encontrar el valor de periodicidad con el que se deben realaizar los pedidos,
 	así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
+
 	\subsubsection{Implementación}
 	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido$_$simulado}, que toma como parámetro un estado inicial, con las variables de 
-	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
+	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, \alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
+
+	\begin{lstlisting}[language=python]
+		def recocido_simulado(initial_state):
+ 		 L = 0 #Num de iteraciones donde mantenemos la temperatura
+  		initial_temp = 10000 
+  		final_temp =.1
+  		alpha = 0.95 #Ritmo de decrecimiento de la temperatura
+  		iteraciones = 1 #Contador de iteraciones
+	
+	
+	\end{lstlisting}
 
 	En la primera iteracion, damos a la variable \texttt{current$_$state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
 	Generamos los beneficios utilizando el método \texttt{get$_$benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
 	"benef" del current_state. Igualamos la variable \texttt{best$_$state} al current_state.\\
 
+	\begin{lstlisting}[language=python]
+		# Primera iteracion
+		current_temp = initial_temp
+		current_state = initial_state
+		current_state["benef"] = get_benef(current_state)
+		best_state = current_state
+		
+	\end{lstlisting}			
+
 	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno
 	de los más utilizados (referencia a tfm), si bien es cierto que existen otros.\\
+
+	\begin{lstlisting}[language=python]		
+		while current_temp>final_temp:
+			# Comprobar si el vecino es mejor
+			neighbor = get_neighbor(current_state)
+			neighbor["benef"] = get_benef(neighbor)
+	
+			benef_diff = neighbor["benef"] - current_state["benef"]
+			prob = math.exp(-abs(benef_diff) / current_temp)
+		
+			# Si es mejor, aceptamos vecino
+			# Si es peor, aceptamos si p>u
+			if benef_diff > 0 or random.uniform(0, 1) < prob:
+				current_state = neighbor
+	\end{lstlisting}	
 
 	Al entrar en el bucle, utilizamos el método \texttt{get$_$neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método
 	\texttt{get$_$benef}, obtenemos el beneficio que genera el vecino, y igualamos prob al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. Si la solución es mejor, entonces la variable \texttt{current$_$state} pasa a ser el estado del vecino.
 	Si la solución es peor, entonces generamos una probabilidad aleatoria utlizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
 	entonces nos quedamos con el \texttt{current$_$state} actual. Si es menor, entonces acutalziamos current_state al valor del vecino.\\
 
+	\begin{lstlisting}[language=python]		
+	def get_benef(state):
+   		return simul_main(state["periodicidad"], state["nivel_1"], state["nivel_2"])
+
+	def get_neighbor(state):
+
+		"""Devuelve vecinos en un radio 1"""
+		new_periodicidad = state["periodicidad"] +  np.random.normal(0,2,1)[0]
+		new_nivel_1 = state["nivel_1"] +  round(np.random.normal(0,2,1)[0])
+		new_nivel_2 = state["nivel_2"] +  round(np.random.normal(0,2,1)[0])
+
+		neighbor = {'periodicidad':new_periodicidad ,  
+						'nivel_1': new_nivel_1,
+						'nivel_2': new_nivel_2 }
+
+		return neighbor
+	\end{lstlisting}		
+
 	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
 	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best$_$state} es peor que la del estado actual, actualizamos \texttt{best$_$state}.
 	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
+
+	\begin{lstlisting}[language=python]
+		# Bajamos temperatura
+		if L>10:
+			  current_temp = current_temp * alpha
+			  L=0
+	
+		if best_state["benef"] < current_state["benef"]:
+		  best_state = current_state
+	
+		iteraciones+=1
+		L+=1
+		\end{lstlisting}
 
 	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best$_$state}.
 
@@ -375,7 +487,7 @@ las existencias de ambos productos quedando completamente vacío el inventario, 
 	\begin{itemize}
 		\item La temperatura incial es de 10000 grados. Probando con valores menores, como 9000, no se alcanzaba el mínimo global.
 		\item La temperatura final es de 0.1 grados
-		\item Alpha es 0.95, siguiendo las recomendaciones.
+		\item \alpha es 0.95, siguiendo las recomendaciones (Hajek, 1988).
 		\item El valor de L es de 10 pasos
 		\item El radio del entorno es igual a 1.
 	\end{itemize}
