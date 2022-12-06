@@ -221,6 +221,90 @@
 	Cabe resaltar que un cliente no se considera satisfecho si recibe el pedido deseado de uno de los productos, pero no del otro.
 	
 	\subsubsection{Resultados}
+	En esta sección se muestran los resultados de la ejecución de la simulación descrita. Tal y como
+	se ha descrito en la sección de implementación del código, se ha llevado un seguimiento de la
+	simulación gracias a las sentencias \textit{print()} que se han colocado en las distintas funciones del script.
+Ejemplos de las salidas para cada uno de los eventos posibles son:
+	\begin{itemize}
+		\item \textbf{Llegada de un cliente.} Podemos hacer un seguimiento del momento en el que se produce
+la llegada del cliente, cuántas unidades demanda de cada producto y el estado del almacén
+antes y después del servicio.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.75\textwidth]{include/llegada_cliente.png}
+		\end{figure}
+		
+		\item \textbf{Realización de un pedido.} Se muestra el instante de tiempo en el que se realiza el pedido,
+el estado del almacén en ese momento y el tiempo que tardará en llegar dicho pedido.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.75\textwidth]{include/realizacion_pedido.png}
+		\end{figure}
+	
+		\item \textbf{Llegada del pedido.} Se indica el instante en el que llega el pedido, el nivel de inventario
+ antes y después de la llegada del pedido, y el tiempo que el almacén estuvo vacío en caso
+de haber sido así.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.75\textwidth]{include/llegada_pedido.png}
+		\end{figure}
+		
+	\end{itemize}
+
+	En la siguiente gráfica podemos ver la evolución de los niveles de inventario de los productos $1$
+y $2$ a lo largo del tiempo de simulación ($5$ meses), equivalente a $3600$ horas. Podemos
+observar cómo se repite para cada tipo de producto la estructura de picos a lo largo del tiempo
+con unas alturas variables pero muy cercanas.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{include/simulacion_5m_ancha.png}
+	\end{figure}
+
+	\begin{itemize}
+		\item Durante el tiempo de simulación el total de ingresos recibidos gracias a las compras de
+	los clientes es de $99\hspace{1mm}460$ euros.
+
+		\item En total se han realizado $21$ pedidos que suman un gasto de $40\hspace{1mm}315.34$ euros.
+
+		\item El coste de almacenamiento de los productos ha sido de $864.34$ euros.
+	\end{itemize}
+
+	Para calcular el beneficio obtenido basta con restar a los ingresos los gastos de pedido y los gastos
+de almacenamiento:
+
+	$$beneficio = 99\hspace{1mm}460 - 40\hspace{1mm}315.34 - 864.34 = 58\hspace{1mm}280.32$$
+	
+	
+	Partiendo de un nivel de inventario de $70$ unidades de cada tipo de producto, y con la política de
+pedidos descrita en el enunciado, la proporción de tiempo que el almacén está completamente
+vacío es de un $5.33\%$ del tiempo, lo que en horas equivale a $191.3$ horas.
+
+	
+	En $3\hspace{1mm}600$ horas han llegado un total de $7\hspace{1mm}298$ clientes de los cuales:
+	
+	\begin{itemize}
+		\item $6\hspace{1mm}941$ clientes su demanda ha sido completamente satisfecha.
+		\item $357$ clientes su demanda no ha sido satisfecha.
+	\end{itemize}
+
+	Eso supone que la demanda de un $95.11\%$ de los clientes que llegaron a la tienda en este periodo
+
+	de $5$ meses fue totalmente satisfecha.
+	
+	Analizando los resultados, si observamos más de cerca en la gráfica el periodo de tiempo que
+comprende los $5$ primeros días de la simulación ($120$ horas), podemos observar que debido al
+nivel inicial de inventario y a que la política de pedidos establece que los pedidos se hacen de
+forma periódica cada $168$ horas (cada $7$ días), hay una gran franja en la que el inventario de ambos
+productos está a $0$ sin poder satisfacerse la demanda de los clientes que llegan en ese periodo.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.75\textwidth]{include/simulacion_5d.png}
+	\end{figure}
+	
+	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $16$
+	horas se agotaron las unidades del producto $2$ y a las $22$ horas de simulación ya se habían acabado
+las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
 	
 	\subsubsection{Representación gráfica de los resultados}
 	
@@ -264,26 +348,26 @@
 	El problema que buscamos resolver en esta práctica con este algorimto es encontrar el valor de periodicidad con el que se deben realaizar los pedidos,
 	así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
 	\subsubsection{Implementación}
-	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido_simulado}, que toma como parámetro un estado inicial, con las variables de 
+	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido$_$simulado}, que toma como parámetro un estado inicial, con las variables de 
 	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
 
-	En la primera iteracion, damos a la variable \texttt{current_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
-	Generamos los beneficios utilizando el método \texttt{get_benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
-	"benef" del current_state. Igualamos la variable \texttt{best_state} al current_state.\\
+	En la primera iteracion, damos a la variable \texttt{current$_$state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
+	Generamos los beneficios utilizando el método \texttt{get$_$benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
+	"benef" del current_state. Igualamos la variable \texttt{best$_$state} al current_state.\\
 
 	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno
 	de los más utilizados (referencia a tfm), si bien es cierto que existen otros.\\
 
-	Al entrar en el bucle, utilizamos el método \texttt{get_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método
-	\texttt{get_benef}, obtenemos el beneficio que genera el vecino, y igualamos prob al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. Si la solución es mejor, entonces la variable \texttt{current_state} pasa a ser el estado del vecino.
+	Al entrar en el bucle, utilizamos el método \texttt{get$_$neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método
+	\texttt{get$_$benef}, obtenemos el beneficio que genera el vecino, y igualamos prob al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. Si la solución es mejor, entonces la variable \texttt{current$_$state} pasa a ser el estado del vecino.
 	Si la solución es peor, entonces generamos una probabilidad aleatoria utlizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
-	entonces nos quedamos con el \texttt{current_state} actual. Si es menor, entonces acutalziamos current_state al valor del vecino.\\
+	entonces nos quedamos con el \texttt{current$_$state} actual. Si es menor, entonces acutalziamos current_state al valor del vecino.\\
 
 	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
-	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best_state} es peor que la del estado actual, actualizamos \texttt{best_state}.
+	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best$_$state} es peor que la del estado actual, actualizamos \texttt{best$_$state}.
 	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
 
-	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best_state}.
+	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best$_$state}.
 
 	
 	\subsubsection{Resultados}
