@@ -13,6 +13,7 @@
 \usepackage{float} % para que las figuras no floten
 \usepackage{subcaption}
 \usepackage{soul}
+\usepackage{pythonhighlight} % para el entorno python de listings
 \usepackage[colorlinks=true]{hyperref}
 \usepackage{listings}
 \usepackage{newtxtext, newtxmath}
@@ -232,9 +233,8 @@
 	
 	\textbf{Nota.} El almacén permanece abierto las $24$ horas al día de lunes a domingo. El proveedor y la empresa transportista (que sirve los pedidos) también trabajan las $24$ horas, no cerrando en ningún momento.
 
-	\subsection{Modelización del problema}
+	\subsection{Modelado del problema}
 	El problema descrito se puede representar según el diagrama a continuación.
-	
 	
 	\begin{figure}[H]
 		\centering
@@ -242,7 +242,15 @@
 		\caption{Representación gráfica del modelado del problema}
 	\end{figure}
 	
-	\hl{explicar la imagen con palabras}\newpage
+	El almacén guarda productos de dos tipos, siendo $x_1$ y $x_2$ la cantidad de cada uno de los productos almacenados en un instante. Los productos se guardan por separado, teniendo una cantidad máxima de cada producto en stock.
+	
+	Una de las principales características de este problema es su política de pedidos. Cada $7$ días el propietario realiza un pedido al proveedor, independientemente del estado del almacén durante los días anteriores.
+	
+	La llegada de clientes al sistema sigue una distribución de Poission con $\lambda = 0.5$, mientras que la llegada de pedidos sigue una normal $N(48, 3.5)$.
+	
+	El coste total del sistema se calcula como las ganancias por las ventas de productos ($R$) menos los costes de almacenamiento ($H$) y costes de compra de productos al proveedor ($C$).
+	
+	
 	
 	\subsection{Simulación del problema. Estimación de beneficios y satisfacción de clientes.}
 	Según lo indicado en el apartado a), el objetivo de esta sección es obtener los siguientes valores.
@@ -256,7 +264,130 @@
 	\subsubsection{Implementación}
 	La implementación de esta simulación se realizó utilizando el lenguaje python, definiendo de manera separada las rutinas de llegada de un cliente, llegada de un pedido y compra de un pedido.
 	
-	Cabe resaltar que un cliente no se considera satisfecho si recibe el pedido deseado de uno de los productos, pero no del otro.
+	Las variables utilizadas se definen como globales, permitiendo que la entrada de cada uno de los métodos sea únicamente el tiempo de simulación (\textit{ts}). No existen problemas de acceso concurrente a las variables, ya que todo el proceso de simulación sucede de manera lineal.
+	
+	A continuación se destacarán las rutinas utilizadas para cada tipo de evento:
+	\begin{itemize}
+		\item \textbf{Llegada de un cliente}. 
+		
+		Esta rutina se ejecuta con la llegada de un nuevo cliente al sistema. Se actualizan los costes de almacenamiento y el estado del almacén, así como los beneficios en caso de poder satisfacer las necesidades del cliente. 
+		Cabe resaltar que un cliente no se considera satisfecho si recibe el pedido deseado de uno de los productos, pero no del otro.
+		
+		En este método se genera también la llegada del siguiente cliente.
+		
+		\begin{python}
+def rutina_llegada_cliente(ts):
+	global H, h, t_real, x_1, x_2, Nc, Nnc, var_aux, R, Y, y_1, y_2
+	global r_1, r_2, var_aux, T_simulacion
+	
+	#Aumenta el coste de almacenamiento
+	H += (ts-t_real)*h*(x_1+x_2)
+	t_real = ts
+
+	
+	#Generamos demanda del cliente
+	demanda_1 = np.random.choice(demanda, 1, p=probab_1)[0]
+	demanda_2 = np.random.choice(demanda, 1, p=probab_2)[0]
+	
+	#Si hay suficiente almacenado, esta satisfecho
+	if demanda_1<=x_1 and demanda_2<=x_2 :
+		R += demanda_1*r_1 + demanda_2*r_2 #sube el beneficio
+		x_1 -= demanda_1	 #baja el inventario
+		x_2 -= demanda_2
+		Nc += 1 #cliente satisfecho
+	#Si no hay suficiente almacenado de algun producto, no esta satisfecho
+	else:
+		if(demanda_1<=x_1):
+			R += demanda_1*r_1
+			x_1 -= demanda_1
+		elif(demanda_2<=x_2):
+			R += demanda_2*r_2
+			x_2 -= demanda_2
+		Nnc += 1 #cliente no satisfecho
+	
+	# Si se ha vaciado del todo (y antes no estaba vacio) guardamos cuando
+	if x_2 == 0 and x_1 == 0 and var_aux == 0 :
+		var_aux = t_real
+
+	
+	#Generamos el tiempo que tarda en llegar el siguiente cliente
+	Y = stats.poisson.rvs(lambda_poisson, size=1)[0]
+	
+	# si el cliente llega antes de acabar la simulacion, se simula
+	if Y+t_real < T_simulacion:
+		lista['tc'] = t_real+Y
+		\end{python}
+	
+	\item \textbf{Llegada de un pedido}. 
+	
+	Esta rutina se ejecuta con la llegada de un pedido que se compró en el pasado al sistema. Se actualizan los costes de almacenamiento, así como el nivel de inventario posterior a la recogida del pedido. Según el tiempo de llegada del pedido, se calcula el precio de la compra.
+	
+	\begin{python}
+def rutina_llegada_pedido(ts):
+	global H, K, h, t_real, C, t0, var_aux, x_1, x_2, y_1, y_2
+	global p1_1, p1_2, p2_1, p2_1, penal, var_aux
+	
+	#Aumenta el coste de almacenamiento
+	H += (ts-t_real)*h*(x_1+x_2)
+	t_real = ts
+	
+	#Aumenta el nivel de inventario
+	x_1 += y_1
+	x_2 += y_2
+	
+	#Si son muchas unidades, descuento en el precio
+	Ci_1 = K + y_1 * p1_1 if y_1<=n_descuent_1 else K + y_1 * p1_2
+	Ci_2 = K + y_2 * p2_1 if y_2<=n_descuent_2 else K + y_2 * p2_2
+	
+	#Si llega pronto es mas caro, si llega tarde, es mas barato
+	if L < Lref-lim_penal:
+		C += (Ci_1 + Ci_2) * (1 + penal)
+	elif L > Lref+lim_penal:
+		C += (Ci_1 + Ci_2) * (1 - penal)
+	else:
+		C += Ci_1 + Ci_2
+		
+	#Ya no quedan productos por llegar
+	y_1 = 0
+	y_2 = 0
+	
+	# Si estaba vacio el inventario (se vacio en el instante var_aux),
+	# aumenta el tiempo que ha estado vacio.
+	if var_aux > 0:
+		t0 += t_real - var_aux
+		var_aux = 0
+	\end{python}
+	
+	\item \textbf{Compra de un pedido}. 
+	
+	Esta rutina se ejecuta en la compra de un nuevo pedido para el almacén. De acuerdo con las indicaciones del enunciado, cada siete días se realiza una compra de la cantidad restante para completar el almacén de cada uno de los productos. 
+	
+	\begin{python}
+def rutina_compra_pedido(ts):
+
+	global H, x_1, x_2, t_real, y_1, y_2, h, t_real
+	global P1, P2, lista, T_simulacion
+	
+	# Aumenta el coste de almacenamiento
+	H += (ts-t_real)*h*(x_1+x_2)
+	t_real = ts
+	
+	#Cantidad a pedir es lo que falta para llenar el almacen
+	y_1 = P1 - x_1
+	y_2 = P2 - x_2
+	
+	#Generamos cuanto va a tardar en llegar el pedido
+	L = np.random.normal(mu, sigma, 1)[0]
+	
+	# actualizamos el tiempo de llegada del pedido y el tiempo de siguiente compra
+	if L+t_real < T_simulacion:
+		lista['tp'] = t_real + L
+	
+	if t_real+Tp < T_simulacion:
+		lista['tpc'] = t_real + Tp
+	\end{python}
+	
+	\end{itemize}
 	
 	\subsubsection{Resultados}
 	En esta sección se muestran los resultados de la ejecución de la simulación descrita. Tal y como
@@ -278,6 +409,7 @@ el estado del almacén en ese momento y el tiempo que tardará en llegar dicho p
 			\centering
 			\includegraphics[width=0.75\textwidth]{include/realizacion_pedido.png}
 		\end{figure}
+	
 	
 		\item \textbf{Llegada del pedido.} Se indica el instante en el que llega el pedido, el nivel de inventario
  antes y después de la llegada del pedido, y el tiempo que el almacén estuvo vacío en caso
@@ -346,7 +478,21 @@ las existencias de ambos productos quedando completamente vacío el inventario, 
 	
 	\subsubsection{Representación gráfica de los resultados}
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{include/sim.png}
+		\caption{Estado del almacén de ambos productos durante la simulación}
+	\end{figure}
+
+\newpage
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{include/sim_first5h.png}
+		\caption{Estado del almacén de ambos productos durante las primeras 5 horas de simulación}
+	\end{figure}
+\newpage
+
 	\subsection{Simulación del problema con metaheurísticas. Identificación de política de pedidos óptima.}
 	\subsubsection{Introducción al Recocido Simulado}
 	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización
@@ -394,6 +540,7 @@ las existencias de ambos productos quedando completamente vacío el inventario, 
 	así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
 
 	\subsubsection{Implementación}
+	El proceso de recocido simulado genera N iteraciones de la simulación, modificando algunos de los valores
 	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido$_$simulado}, que toma como parámetro un estado inicial, con las variables de 
 	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, \alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
 
