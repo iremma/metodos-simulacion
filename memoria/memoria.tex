@@ -14,42 +14,7 @@
 \usepackage{subcaption}
 \usepackage{soul}
 \usepackage{pythonhighlight} % para el entorno python de listings
-\usepackage[colorlinks=true]{hyperref}
-\usepackage{listings}
-\usepackage{newtxtext, newtxmath}
-\usepackage{enumitem}
-\usepackage{titling}
 
-% -- Defining colors:
-\usepackage[dvipsnames]{xcolor}
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-% Definig a custom style:
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codepurple},
-    keywordstyle=\color{NavyBlue},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple}, 
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=t,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-
-% -- Setting 
-\lstset{style=mystyle}
-\setlength{\droptitle}{-6em}
 
 
 \textheight = 24 cm
@@ -389,7 +354,7 @@ def rutina_compra_pedido(ts):
 	
 	\end{itemize}
 	
-	\subsubsection{Resultados}
+	\subsubsection{Resultados y representación gráfica}
 	En esta sección se muestran los resultados de la ejecución de la simulación descrita. Tal y como
 	se ha descrito en la sección de implementación del código, se ha llevado un seguimiento de la
 	simulación gracias a las sentencias \textit{print()} que se han colocado en las distintas funciones del script.
@@ -472,179 +437,148 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 		\includegraphics[width=0.75\textwidth]{include/simulacion_5d.png}
 	\end{figure}
 	
-	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $16$
-	horas se agotaron las unidades del producto $2$ y a las $22$ horas de simulación ya se habían acabado
-las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
-	
-	\subsubsection{Representación gráfica de los resultados}
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.9\textwidth]{include/sim.png}
-		\caption{Estado del almacén de ambos productos durante la simulación}
-	\end{figure}
-
-\newpage
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.9\textwidth]{include/sim_first5h.png}
-		\caption{Estado del almacén de ambos productos durante las primeras 5 horas de simulación}
-	\end{figure}
-\newpage
+	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $16$ 	horas se agotaron las unidades del producto $2$ y a las $22$ horas de simulación ya se habían acabado las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
 
 	\subsection{Simulación del problema con metaheurísticas. Identificación de política de pedidos óptima.}
 	\subsubsection{Introducción al Recocido Simulado}
-	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización
-	no son lo suficientemente buenos para acoplarse al gran número de factores de decisión y restricciones. Es por ello que se desarrollan las metaheurísticas,
-	dando un paso más alla de las clásicas heurísticas que se centraban únicamente en un tipo de problema, y podían quedarse atrapadas en un mínimo local.
-	//
-	Las metaheurísticas	utilizan conocimiento de distintas areas de la ciencia, como puede ser la inteligencia artificial, la estadística, la genética... para proponer algoritmos que 
-	devuelven una solución eficiente y satisfacctoria de un problema de optimización.//
-	En esta práctica, se nos ha propuesto utilizar la metaheurística del tipo de Búsqueda Global, conocida como Recocido Simulado. Esta metaheurística se basa
-	en el fénomeno de enfriamiento de metales que se estudia en el ámbito de metalurgia y termodinámica. //
+	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización no son suficientes para acoplarse al gran número de factores de decisión y restricciones. Es por ello que se desarrollan las metaheurísticas, dando un paso más allá de las heurísticas clásicas que se centraban únicamente en un tipo de problema, y podían quedarse atrapadas en un mínimo local.\\
+	
+	Las metaheurísticas	utilizan conocimiento de distintas áreas de la ciencia, como puede ser la inteligencia artificial, la estadística, la genética... para proponer algoritmos que 
+	devuelven una solución eficiente y satisfactoria de un problema de optimización.\\
+	
+	En esta práctica, se nos ha propuesto utilizar la metaheurística del tipo de búsqueda global, conocida como \textit{recocido simulado}. Esta metaheurística se basa en el fénomeno de enfriamiento de metales que se estudia en el ámbito de metalurgia y termodinámica. 
+	
 	Para aplicar esta idea a un problema de optimización, se plantean tres principales etapas:
 	\begin{itemize}
-		\item En la primera etapa, las soluciones elegidas del entorno E(x) de manera aleatoria, no tienen porque ser las mejores. Si la solución
-		es mejor que la anterior, cambiamos a esa directamente, pero si es peor, podemos cambiar a ella si la probabilidad supera un umbral determinado por
-		una variable aleatoria. En esta primera fase, la probabilidad de elegir soluciones peores es más alta, evitando así caer en mínimos locales.
-		\item En la segunda etapa, la probabilidad de que elijamos una peor solución ya no es tan grande, pero aun así hay posibilidad de volver atrás.
-		\item En esta última etapa, solo aceptaremos movimientos que mejoren la solución actual.
+		\item En la primera etapa, las soluciones elegidas en el entorno $E(x)$ de manera aleatoria no son necesariamente óptimas. Si la solución generada es mejor que la anterior, la exploramos directamente, pero si es peor, podemos explorarla según una probabilidad determinada por una variable aleatoria. En esta primera fase, la probabilidad de elegir soluciones peores es más alta, evitando así caer en mínimos locales y permitiendo explorar un entorno más amplio.
+		\item En la segunda etapa, la probabilidad de que elijamos una solución peor ya no es tan alta, pero aun así hay posibilidad de volver atrás.
+		\item En la última etapa, sólo aceptaremos movimientos que mejoren la solución actual.
 	\end{itemize}
 	
-	En este algorimto es muy importante la elección del parámetro Temperatura. Este parámetro, ira decreciendo cada L iteraciones, hasta
-	llegar a una temperatura final u otro punto de parada que se haya especificado. La forma en la que la temperatura influye en la búsqueda del algoritmo es mediante
-	la expresión que define la distribución de Boltzman. 
+	En este algoritmo es muy importante la elección del parámetro \textit{Temperatura}. Este parámetro, ira decreciendo cada $L$ iteraciones, hasta llegar a una temperatura final u otro punto de parada que se haya especificado. La forma en la que la temperatura influye en la búsqueda del algoritmo es mediante la expresión que define la distribución de Boltzman. 
 
-	\begin{equation}
-		p(i)=e^-\frac{f(y)-f(x_i)}{T_i}
-	\end{equation}
+	$$p(i)=e^{-\dfrac{f(y)-f(x_i)}{T_i}}$$
 	
 	Esta es la distribución que va a tomar la probabilidad de elegir una peor solución, de manera que  si la temperatura es muy alta, la probabilidad de que elijamos una peor solución será mayor.
-	La temperatura decrece según la siguiente expresión: 
-	\begin{equation}
-		T_{hL}=\alpha ^h T_1
-	\end{equation}
-
-	El valor alfa va a determinar cuanto disminuye la temperatura.//
-	En general, los hiperparametros que vamos a tener que controlar para la ejecución del algorimto son los siguientes:
+	La temperatura decrece según la expresión
+	
+	$$T_{hL}=\alpha ^h T_1$$
+	
+	El valor alfa ($\alpha$) determinará cuanto disminuye la temperatura.
+	
+	En general, los hiperparámetros que vamos a tener que controlar para la ejecución del algoritmo son los siguientes:
 	\begin{itemize}
 		\item Temperatura inicial
-		\item L iteraciones que deben pasar para actualizar la temperatura
-		\item \alpha
+		\item $L$, iteraciones que deben pasar para actualizar la temperatura
+		\item $\alpha$, velocidad de disminución de la temperatura
 		\item Criterio de parada
-		\item El radio del entorno para elegir una solución vecina
+		\item Radio del entorno para elegir una solución vecina
 	\end{itemize}
 	
-	El problema que buscamos resolver en esta práctica con este algorimto es encontrar el valor de periodicidad con el que se deben realaizar los pedidos,
-	así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
+	El problema que buscamos resolver en esta práctica con este algoritmo es encontrar el valor de periodicidad con el que se deben realizar los pedidos, así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
 
 	\subsubsection{Implementación}
-	El proceso de recocido simulado genera N iteraciones de la simulación, modificando algunos de los valores
-	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido$_$simulado}, que toma como parámetro un estado inicial, con las variables de 
-	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, \alpha, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
-
-	\begin{lstlisting}[language=python]
-		def recocido_simulado(initial_state):
- 		 L = 0 #Num de iteraciones donde mantenemos la temperatura
-  		initial_temp = 10000 
-  		final_temp =.1
-  		alpha = 0.95 #Ritmo de decrecimiento de la temperatura
-  		iteraciones = 1 #Contador de iteraciones
+	El proceso de recocido simulado genera $N$ iteraciones de la simulación, modificando algunos de los valores en cada iteración.\\
 	
+	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido} \texttt{\_simulado}, que toma como parámetro un estado inicial, con las variables de  	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, $\alpha$, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
+
+	\begin{python}
+def recocido_simulado(initial_state):
+	L = 0 #Num de iteraciones donde mantenemos la temperatura
+	initial_temp = 10000 
+	final_temp =.1
+	alpha = 0.95 #Ritmo de decrecimiento de la temperatura
+	iteraciones = 1 #Contador de iteraciones
+	\end{python}
+
+	En la primera iteracion, damos a la variable \texttt{current\_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
+	Generamos los beneficios utilizando el método \texttt{get\_benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
+	"benef" del current\_state. Igualamos la variable \texttt{best\_state} al current\_state.
+
+	\begin{python}
+	# Primera iteracion
+	current_temp = initial_temp
+	current_state = initial_state
+	current_state["benef"] = get_benef(current_state)
+	best_state = current_state
+	\end{python}			
+
+	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno de los más utilizados \hl{(referencia a tfm)}, si bien es cierto que existen otros.
+
+	\begin{python}	
+	while current_temp>final_temp:
+		# Comprobar si el vecino es mejor
+		neighbor = get_neighbor(current_state)
+		neighbor["benef"] = get_benef(neighbor)
+
+		benef_diff = neighbor["benef"] - current_state["benef"]
+		prob = math.exp(-abs(benef_diff) / current_temp)
 	
-	\end{lstlisting}
+		# Si es mejor, aceptamos vecino
+		# Si es peor, aceptamos si p>u
+		if benef_diff > 0 or random.uniform(0, 1) < prob:
+			current_state = neighbor
+	\end{python}	
 
-	En la primera iteracion, damos a la variable \texttt{current$_$state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
-	Generamos los beneficios utilizando el método \texttt{get$_$benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
-	"benef" del current_state. Igualamos la variable \texttt{best$_$state} al current_state.\\
-
-	\begin{lstlisting}[language=python]
-		# Primera iteracion
-		current_temp = initial_temp
-		current_state = initial_state
-		current_state["benef"] = get_benef(current_state)
-		best_state = current_state
-		
-	\end{lstlisting}			
-
-	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno
-	de los más utilizados (referencia a tfm), si bien es cierto que existen otros.\\
-
-	\begin{lstlisting}[language=python]		
-		while current_temp>final_temp:
-			# Comprobar si el vecino es mejor
-			neighbor = get_neighbor(current_state)
-			neighbor["benef"] = get_benef(neighbor)
+	Al entrar en el bucle, utilizamos el método \texttt{get\_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método \texttt{get\_benef}, obtenemos el beneficio que genera el vecino, y igualamos \texttt{prob} al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. 
 	
-			benef_diff = neighbor["benef"] - current_state["benef"]
-			prob = math.exp(-abs(benef_diff) / current_temp)
-		
-			# Si es mejor, aceptamos vecino
-			# Si es peor, aceptamos si p>u
-			if benef_diff > 0 or random.uniform(0, 1) < prob:
-				current_state = neighbor
-	\end{lstlisting}	
+	Si la solución es mejor, la variable \texttt{current\_state} pasa a ser el estado del vecino.
+	Si la solución es peor, generamos una probabilidad aleatoria utilizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
+	nos quedamos con el \texttt{current\_state} actual. Si es menor, actualizamos current\_state al valor del vecino.
 
-	Al entrar en el bucle, utilizamos el método \texttt{get$_$neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método
-	\texttt{get$_$benef}, obtenemos el beneficio que genera el vecino, y igualamos prob al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. Si la solución es mejor, entonces la variable \texttt{current$_$state} pasa a ser el estado del vecino.
-	Si la solución es peor, entonces generamos una probabilidad aleatoria utlizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
-	entonces nos quedamos con el \texttt{current$_$state} actual. Si es menor, entonces acutalziamos current_state al valor del vecino.\\
+	\begin{python}	
+def get_benef(state):
+  		return simul_main(state["periodicidad"],
+  		                  state["nivel_1"], state["nivel_2"])
 
-	\begin{lstlisting}[language=python]		
-	def get_benef(state):
-   		return simul_main(state["periodicidad"], state["nivel_1"], state["nivel_2"])
+def get_neighbor(state):
+	"""Devuelve vecinos en un radio 1"""
+	new_periodicidad = state["periodicidad"] +  np.random.normal(0,2,1)[0]
+	new_nivel_1 = state["nivel_1"] +  round(np.random.normal(0,2,1)[0])
+	new_nivel_2 = state["nivel_2"] +  round(np.random.normal(0,2,1)[0])
 
-	def get_neighbor(state):
+	neighbor = {'periodicidad':new_periodicidad ,  
+					'nivel_1': new_nivel_1,
+					'nivel_2': new_nivel_2 }
 
-		"""Devuelve vecinos en un radio 1"""
-		new_periodicidad = state["periodicidad"] +  np.random.normal(0,2,1)[0]
-		new_nivel_1 = state["nivel_1"] +  round(np.random.normal(0,2,1)[0])
-		new_nivel_2 = state["nivel_2"] +  round(np.random.normal(0,2,1)[0])
-
-		neighbor = {'periodicidad':new_periodicidad ,  
-						'nivel_1': new_nivel_1,
-						'nivel_2': new_nivel_2 }
-
-		return neighbor
-	\end{lstlisting}		
+	return neighbor
+	\end{python}		
 
 	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
-	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best$_$state} es peor que la del estado actual, actualizamos \texttt{best$_$state}.
-	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
+	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best\_state} es peor que la del estado actual, actualizamos \texttt{best\_state}.
+	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.
 
-	\begin{lstlisting}[language=python]
-		# Bajamos temperatura
-		if L>10:
-			  current_temp = current_temp * alpha
-			  L=0
-	
-		if best_state["benef"] < current_state["benef"]:
-		  best_state = current_state
-	
-		iteraciones+=1
-		L+=1
-		\end{lstlisting}
+	\begin{python}
+	# Bajamos temperatura
+	if L>10:
+  		current_temp = current_temp * alpha
+  		L=0
 
-	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best$_$state}.
+	if best_state["benef"] < current_state["benef"]:
+ 		best_state = current_state
+
+	iteraciones+=1
+	L+=1
+	\end{python}
+
+	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best\_state}.
 
 	
 	\subsubsection{Resultados}
-	Los mejores resultados se han obtenido al inicializar los hiperparametros identificados previamente a los siguientes valores:
+	Los mejores resultados se han obtenido al inicializar los hiperparámetros identificados previamente a los siguientes valores:
 	\begin{itemize}
-		\item La temperatura incial es de 10000 grados. Probando con valores menores, como 9000, no se alcanzaba el mínimo global.
-		\item La temperatura final es de 0.1 grados
-		\item \alpha es 0.95, siguiendo las recomendaciones (Hajek, 1988).
-		\item El valor de L es de 10 pasos
-		\item El radio del entorno es igual a 1.
+		\item La temperatura inicial es de $10\hspace{1mm}000$ grados. Probando con valores menores, como $9\hspace{1mm}000$, no se alcanzaba el mínimo global.
+		\item La temperatura final es de $0.1$ grados
+		\item $\alpha$ es $0.95$, siguiendo las recomendaciones (Hajek, 1988).
+		\item El valor de L es de $10$ pasos
+		\item El radio del entorno es igual a $1$.
 	\end{itemize}
-	Para estos hiperparametros, hemos conseguido un beneficio de 59306.655€, 4291,35€ unidades mayor que el del estado inicial. Cabe destacar que, 
-	al inspeccionar los logs que hemos impreso, el mínimo global se alcanza 150 iteraciones antes del final. Hemos probado a optimizar este
-	resultado alterando el valor de L y la temperatura final, pero ninguna de las dos modificaciones ha dado resultados satisfactorios. A continuación,
-	hemos probado a cambiar la distribución que usamos para obtener vecinos del entorno. Para elegir los vecinos, hemos optado por una normal de radio 1, ya que 
-	al probar con distribuciones uniformes y mayor radio, el algoritmo se quedaba atrapado en minimos locales.
+	Para estos hiperparámetros, hemos conseguido un beneficio de $59\hspace{1mm}306\hspace{1mm}655€$, $4\hspace{1mm}291.35€$ unidades mayor que el del estado inicial. 
 	
-\newpage
+	Cabe destacar que, al inspeccionar los \textit{logs} que hemos impreso, el mínimo global se alcanza $150$ iteraciones antes del final. Hemos probado a optimizar este resultado alterando el valor de $L$ y la temperatura final, pero ninguna de las dos modificaciones ha dado resultados satisfactorios. 
+	
+	También hemos probado a cambiar la distribución que usamos para obtener vecinos del entorno. Para elegir los vecinos, hemos optado por una normal de radio $1$, ya que al probar con distribuciones uniformes y mayor radio, el algoritmo se quedaba atrapado en mínimos locales.
+	
 	\section*{Bibliografía}
 	\addcontentsline{toc}{section}{Bibliografía}
 	\bibliography{include/references}
