@@ -282,6 +282,7 @@ def rutina_llegada_cliente(ts):
 	\item \textbf{Llegada de un pedido}. 
 	
 	Esta rutina se ejecuta con la llegada de un pedido que se compró en el pasado al sistema. Se actualizan los costes de almacenamiento, así como el nivel de inventario posterior a la recogida del pedido. Según el tiempo de llegada del pedido, se calcula el precio de la compra.
+	Hemos interpretado que $K$ es el coste fijo de preparar un lote de cada tipo de producto, por lo que se tiene en cuenta para cada uno de los dos tipos de producto producido por separado.
 	
 	\begin{python}
 def rutina_llegada_pedido(ts):
