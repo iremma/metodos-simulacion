@@ -1,16 +1,16 @@
 # Fdb version 3
-["bibtex memoria"] 1672043464 "memoria.aux" "memoria.bbl" "memoria" 1672043464
+["bibtex memoria"] 0 "memoria.aux" "memoria.bbl" "memoria" 0
   "IEEEtran.bst" 0 -1 0 ""
-  "include/references.bib" 1672043462 1764 60d82dc6b0f1dc32ce9e1f0bcbf3762a ""
-  "memoria.aux" 1672043463 4396 4fb26d506e3f4724f2b593da094c9ef1 "pdflatex"
+  "include/references.bib" 1672050459 1972 f5c8a48f8c31d1b7e273a556b0709d82 ""
+  "memoria.aux" 0 -1 0 "pdflatex"
   (generated)
-  "memoria.blg"
   "memoria.bbl"
-["pdflatex"] 1672043463 "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.tex" "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.pdf" "memoria" 1672043463
+  "memoria.blg"
+["pdflatex"] 1672055434 "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.tex" "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.pdf" "memoria" 1672055434
   "./include/portada.tex" 1670081595 3898 bdf2b0b3da7a94e4ca15cba4fbebc33f ""
   "/etc/texmf/web2c/texmf.cnf" 1658159645 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.aux" 1672043463 8 a94a2480d3289e625eea47cd1b285758 ""
-  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.tex" 1672043462 34870 9b949ef30bc705a6ff003fbc002f93d6 ""
+  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.aux" 1672055434 8 a94a2480d3289e625eea47cd1b285758 ""
+  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.tex" 1672055432 36559 6d091d378783ebc8380d6edf983a2df7 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/courier/pcrb8r.tfm" 1136768653 1292 3059476c50a24578715759f22652f3d0 ""
@@ -170,12 +170,12 @@
   "memoria.aux" 0 -1 0 "pdflatex"
   "memoria.bbl" 0 -1 0 "bibtex memoria"
   "memoria.out" 0 -1 0 "pdflatex"
-  "memoria.tex" 1672043462 34870 9b949ef30bc705a6ff003fbc002f93d6 ""
+  "memoria.tex" 1672055432 36559 6d091d378783ebc8380d6edf983a2df7 ""
   (generated)
-  "memoria.pdf"
-  "memoria.toc"
-  "memoria.aux"
-  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.pdf"
-  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.log"
-  "memoria.out"
   "memoria.log"
+  "memoria.out"
+  "memoria.aux"
+  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.log"
+  "memoria.toc"
+  "/home/miko/Documents/MUIA/Metodos/practica-metodos/memoria/memoria.pdf"
+  "memoria.pdf"

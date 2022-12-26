@@ -149,6 +149,10 @@
 	\subsubsection{Resultados del test de correlación interbloque.}
 	Este test solo se realizó en los generadores Ziggurat, Wallace y Monty Pythhon, dado que fueron los más rápidos y en este test se necesitan realizar pruebas con muestras muy grandes. Los generadores de Ziggurat y Monty Python pasaron todos los tests con éxito, mientras que el generador Wallace (tanto el de baja calidad como el de alta), falló con un número inferior a $8$ iteraciones. Esto se debe a que el método Wallace es recursivo.
 	
+	\subsubsection{Implementación del generador Monty Python}
+	Para poder utilizar el generador de Monty Python, una de las opciones mas sencillas es utilizar el packete \texttt{pgnorm} de R, donde esta definido la función \texttt{rpgnorm},
+	que permite generar variables siguiendo una normal utilizando Monty Python, Ziggurat, Polar, entre otros. \cite{mp}. 
+
 	\subsubsection{Conclusiones}
 	Si bien es cierto que el método Wallace es el más rápido, presenta desventajas evidentes como la correlación. 
 	El método Ziggurat, que es más lento que el Wallace, no tiene problemas de correlación, pero si que falla en el test Crush con una colisión identificada en los tests de doble precisión. 
@@ -469,11 +473,22 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 		\item $L$, iteraciones que deben pasar para actualizar la temperatura
 		\item $\alpha$, velocidad de disminución de la temperatura
 		\item Criterio de parada
-		\item Radio del entorno para elegir una solución vecina
+		\item Entorno para elegir una solución vecina
 	\end{itemize}
 	
 	El problema que buscamos resolver en esta práctica con este algoritmo es encontrar el valor de periodicidad con el que se deben realizar los pedidos, así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
-
+	\subsubsection{Ajuste de los hiperparámetros}
+	\subsubsubsection{Temperatura inicial y alfa}
+	\subsubsubsection{L}
+	\subsubsubsection{Criterio de parada}
+	\subsubsubsection{Entorno de vecindad}
+	Como se ha definido previamente, los tres factores de decisión que vamos a ir variando para encontrar un beneficio máximo son: nivel de producto 1, nivel de producto 2 y periodo de pedido. \\
+	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman un valor. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
+	encontrar una solción óptima. 
+	Para encontrar los niveles de producto de las soluciones vecinas, hemos definido un entorno tamano 3, de forma que se van a restar o sumar entre 3 y 0 unidades de producto al estado actual. Se utilizará una función 
+	independiente para cada producto, de forma que el nivel de producto 1 podria aumentar 3 unidades mientras que el nivel de producto 2 podria disminuir. 
+	Para hallar la periodicidad de pedido, que es el otro factor de decisión, en este caso utilizamos una distribución uniforme entre -1 y 1, ya que al tratarse de tiempo puede tomar valores continuos. \\
+	Hemos optado por un entorno relativamente pequeño para evitar saltos grandes entre las soluciones, ya que dificultaría la convergencia del algoritmo. 
 	\subsubsection{Implementación}
 	El proceso de recocido simulado genera $N$ iteraciones de la simulación, modificando algunos de los valores en cada iteración.\\
 	
@@ -530,9 +545,9 @@ def get_benef(state):
 
 def get_neighbor(state):
 	"""Devuelve vecinos en un radio 1"""
-	new_periodicidad = state["periodicidad"] +  np.random.normal(0,2,1)[0]
-	new_nivel_1 = state["nivel_1"] +  round(np.random.normal(0,2,1)[0])
-	new_nivel_2 = state["nivel_2"] +  round(np.random.normal(0,2,1)[0])
+	new_periodicidad = state["periodicidad"] +  np.random.uniform(-1,1)
+	new_nivel_1 = state["nivel_1"] +  random.randint(-3,3)
+	new_nivel_2 = state["nivel_2"] +  random.randint(-3,3)
 
 	neighbor = {'periodicidad':new_periodicidad ,  
 					'nivel_1': new_nivel_1,
