@@ -1,0 +1,34 @@
+CÓDIGO
++ Cambiar los entornos elegidos (el radio) (lo de la normal hay que cambiarlo, no cambiar en más de 1 o 2 unidades, puede ser probabilístico y tirando)
++ Hacer pruebas piloto para definir los parámetros. Que la probabilidad de moverse a soluciones peores sea 0.9 aprox (Cambiar condiciones iniciales, L=50 y vamos ajustando)
++ Gráficos (colocarlos uno encima del otro con la misma escala)
+  . f* -> para analizar la condición de parada, representa la mejor solución encontrada
+  . f
+  . prob. de moverse a soluciones peores que el actual
+  . Temperatura 
+- Ajustar condición de parada -> AÍDA
+
+
+MEMORIA
+- Poner dónde se puede usar monty python -> IRENE
+- diagrama con ordenador del modelado del problema -> LUIS
+- definir cómo se codifican las soluciones y sus tipos (continua, discreta) -> IRENE
+- antes del código , definir as nivel teórico cómo es el entorno de la solución -> IRENE
+- Redactar lo de las pruebas piloto y decisiones sobre eso (condiciones iniciales) ->  LUIS
+- Comentar los gráficos y justificar las decisiones de diseño -> AÍDA
+- Contar la condición de parada -> AÍDA
+- Conclusiones -> IRENE
+
+-------------------------------------------------------------------------------------------------
+
+Persona 1: IRENE
+-Monty Python
+-Definir la codificación de soluciones y los entornos
+-Conclusiones
+
+Persona 2: LUIS
+-Explicar elección de temp inicial y L con pruebas pilotos
+
+Persona 3: AÍDA
+-Explicar las graficas obtenidad
+-Condición de parada  (Codigo + memoria)
