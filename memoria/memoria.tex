@@ -6,7 +6,7 @@
 \usepackage{palatino}
 \usepackage[full]{textcomp}
 \usepackage{hyperref}
-\usepackage{eurosym}
+\usepackage{eurosym} % para el simbolo de euro bonito
 \usepackage[makeroom]{cancel}
 \usepackage{array}
 \usepackage{pdfpages}
@@ -204,6 +204,12 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\textwidth]{include/modelo_almacen.png}
+		\caption{Representación gráfica del modelado del problema}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{include/modelo_almacen_v2.png}
 		\caption{Representación gráfica del modelado del problema}
 	\end{figure}
 	
@@ -441,47 +447,179 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $16$ 	horas se agotaron las unidades del producto $2$ y a las $22$ horas de simulación ya se habían acabado las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
 
 	\subsection{Simulación del problema con metaheurísticas. Identificación de política de pedidos óptima.}
+	
 	\subsubsection{Introducción al Recocido Simulado}
-	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización no son suficientes para acoplarse al gran número de factores de decisión y restricciones. Es por ello que se desarrollan las metaheurísticas, dando un paso más allá de las heurísticas clásicas que se centraban únicamente en un tipo de problema, y podían quedarse atrapadas en un mínimo local.\\
 	
-	Las metaheurísticas	utilizan conocimiento de distintas áreas de la ciencia, como puede ser la inteligencia artificial, la estadística, la genética... para proponer algoritmos que 
-	devuelven una solución eficiente y satisfactoria de un problema de optimización.\\
+	Debido a la complejidad de los problemas de optimización que se busca resolver en el mundo, la búsqueda local y los métodos clásicos de optimización no son suficientes para modelizar correctamente el gran número de factores de decisión y restricciones que intervienen. Por esta razón se desarrollan las metaheurísticas, dando un paso más allá de las heurísticas clásicas que se centran únicamente en un tipo de problema y pueden quedarse atrapadas en un mínimo local.\\
 	
-	En esta práctica, se nos ha propuesto utilizar la metaheurística del tipo de búsqueda global, conocida como \textit{recocido simulado}. Esta metaheurística se basa en el fénomeno de enfriamiento de metales que se estudia en el ámbito de metalurgia y termodinámica. 
+	Las metaheurísticas	utilizan conocimiento de distintas áreas de la ciencia, como puede ser la inteligencia artificial, la estadística, la genética, etc. para proponer algoritmos que generen una solución eficiente  satisfactoria a un problema de optimización.\\
 	
-	Para aplicar esta idea a un problema de optimización, se plantean tres principales etapas:
+	En esta práctica, se nos ha propuesto utilizar una metaheurística de búsqueda global, conocida como \textit{recocido simulado}. Esta metaheurística se basa en el fenómeno de enfriamiento de los metales estudiada en el ámbito de la metalurgia. \\
+	
+	Para aplicar esta idea a un problema de optimización, se plantean tres etapas:
 	\begin{itemize}
 		\item En la primera etapa, las soluciones elegidas en el entorno $E(x)$ de manera aleatoria no son necesariamente óptimas. Si la solución generada es mejor que la anterior, la exploramos directamente, pero si es peor, podemos explorarla según una probabilidad determinada por una variable aleatoria. En esta primera fase, la probabilidad de elegir soluciones peores es más alta, evitando así caer en mínimos locales y permitiendo explorar un entorno más amplio.
-		\item En la segunda etapa, la probabilidad de que elijamos una solución peor ya no es tan alta, pero aun así hay posibilidad de volver atrás.
+		\item En la segunda etapa, la probabilidad de que se elija una solución peor ya no es tan alta, pero aún así hay posibilidad de volver atrás.
 		\item En la última etapa, sólo aceptaremos movimientos que mejoren la solución actual.
 	\end{itemize}
 	
 	En este algoritmo es muy importante la elección del parámetro \textit{Temperatura}. Este parámetro, ira decreciendo cada $L$ iteraciones, hasta llegar a una temperatura final u otro punto de parada que se haya especificado. La forma en la que la temperatura influye en la búsqueda del algoritmo es mediante la expresión que define la distribución de Boltzman. 
-
 	$$p(i)=e^{-\dfrac{f(y)-f(x_i)}{T_i}}$$
-	
-	Esta es la distribución que va a tomar la probabilidad de elegir una peor solución, de manera que  si la temperatura es muy alta, la probabilidad de que elijamos una peor solución será mayor.
-	La temperatura decrece según la expresión
-	
+	Esta es la distribución que va a tomar la probabilidad de elegir una solución peor, de manera que si la temperatura es muy alta, la probabilidad de que se elija una solución peor será mayor. La temperatura decrece según la expresión
 	$$T_{hL}=\alpha ^h T_1$$
-	
 	El valor alfa ($\alpha$) determinará cuanto disminuye la temperatura.
 	
-	En general, los hiperparámetros que vamos a tener que controlar para la ejecución del algoritmo son los siguientes:
+	En general, los hiperparámetros que hay que controlar para la ejecución del algoritmo son los siguientes:
 	\begin{itemize}
 		\item Temperatura inicial
-		\item $L$, iteraciones que deben pasar para actualizar la temperatura
+		\item $L$, número de iteraciones que deben pasar para actualizar la temperatura
 		\item $\alpha$, velocidad de disminución de la temperatura
 		\item Criterio de parada
 		\item Entorno para elegir una solución vecina
 	\end{itemize}
 	
-	El problema que buscamos resolver en esta práctica con este algoritmo es encontrar el valor de periodicidad con el que se deben realizar los pedidos, así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio. 
+	El problema que buscamos resolver en esta práctica con este algoritmo es encontrar el valor de periodicidad con el que se deben realizar los pedidos, así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio.
+	
 	\subsubsection{Ajuste de los hiperparámetros}
-	\subsubsubsection{Temperatura inicial y alfa}
-	\subsubsubsection{L}
-	\subsubsubsection{Criterio de parada}
-	\subsubsubsection{Entorno de vecindad}
+	
+	\paragraph{Temperatura inicial y alfa}.\\
+	
+	\paragraph{L}.\\
+	
+	\paragraph{Criterio de parada}.\\
+	El criterio utilizado en este recocido simulado como condición de parada es haber alcanzado un número $x$ de iteraciones sin cambios, es decir, que tras $x$ iteraciones seguidas en las que no se ha mejorado la función objetivo, en este caso los beneficios, la simulación debe parar.\\
+		
+	Para encontrar el valor óptimo de este parámetro se ejecutaron varias pruebas piloto fijando el resto de parámetros indicados en esta sección. Los valores fueron $\alpha = 0.95$, temp. inicial $=7500$, L $=10$, distancia de la búsqueda de nivel del inventario $3$ y distancia de la búsqueda de periodicidad $1$. \\ 
+	
+	En primer lugar, se usó un valor de $50$, con el que la temperatura no bajó de $5000$ y la solución apenas mejoró, obteniendo un beneficio de $56425.75$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $162.49$ días y un nivel máximo de producto $1501$ y $1001$ respectivamente.
+	
+	Para intentar mejorar los resultados, se aumentó a un valor de $100$, con el que la temperatura aún no bajó de $3000$. En este caso se obtuvo un beneficio de $56924.43$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $170.11$ días y un nivel máximo de producto $1529$ y $997$ respectivamente.
+	
+	Como el valor aún no era suficientemente alto como para que la temperatura bajase a valores cercanos a cero, se usó un valor de $300$. En este caso, la temperatura decrece hasta valores muy cercanos a $0$, y en la gráfica de la solución evaluada se observa la evolución esperada, pasando de una gran variabilidad a una solución óptima más estable. Para esta ejecución se obtuvo un beneficio de $57533.00$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $163.67$ días y un nivel máximo de producto $1461$ y $1000$ respectivamente.
+	
+	La última ejecución piloto usó un valor de $200$, intentando disminuir el tiempo de ejecución manteniendo la calidad de los resultados obtenidos con la ejecución anterior. En este caso, la simulación no llegó a lograr una temperatura suficientemente baja como para lograr un estado en el que los movimientos a estados cercanos sean muy limitados, generando una gráfica de la función fitness diferente a la esperada con esta metaheurística. Se obtuvo un beneficio de $57262.52$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $178.89$ días y un nivel máximo de producto $1496$ y $994$ respectivamente.\\
+	
+	Se decidió no aumentar este valor por encima de $300$ ya que la temperatura alcanza valores muy cercanos a $0$ y la probabilidad de moverse a soluciones peores también es muy cercana a $0$, por lo que sería dificil mejorar el rendimiento de este algoritmo con este parámetro.\\
+	
+	En las siguientes figuras se encuentran las gráficas generadas en cada iteración de la simulación, en las que se pueden apreciar los detalles señalados.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/50/temp.png}
+			\caption{valor: $50$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/100/temp.png}
+			\caption{valor: $100$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/200/temp.png}
+			\caption{valor: $200$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/300/temp.png}
+			\caption{valor: $300$}
+		\end{subfigure}
+		\caption{Pruebas para el criterio de parada. Evolución de la temperatura.}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/50/f.png}
+			\caption{valor: $50$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/100/f.png}
+			\caption{valor: $100$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/200/f.png}
+			\caption{valor: $200$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/300/f.png}
+			\caption{valor: $300$}
+		\end{subfigure}
+		\caption{Pruebas para el criterio de parada. Evolución de la solución evaluada.}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/50/f_ast.png}
+			\caption{valor: $50$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/100/f_ast.png}
+			\caption{valor: $100$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/200/f_ast.png}
+			\caption{valor: $200$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/300/f_ast.png}
+			\caption{valor: $300$}
+		\end{subfigure}
+		\caption{Pruebas para el criterio de parada. Evolución de la mejor solución hallada.}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/50/prob.png}
+			\caption{valor: $50$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/100/prob.png}
+			\caption{valor: $100$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/200/prob.png}
+			\caption{valor: $200$}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/parada/300/prob.png}
+			\caption{valor: $300$}
+		\end{subfigure}
+		\caption{Pruebas para el criterio de parada. Evolución de la probabilidad de moverse a soluciones peores.}
+	\end{figure}
+	
+	Con los resultados de estas pruebas piloto se decide fijar el número de iteraciones sin cambio necesarias para que el algoritmo considere haber alcanzado un óptimo global $300$.
+	
+	\paragraph{Entorno de vecindad}.\\	
+	
+	
 	Como se ha definido previamente, los tres factores de decisión que vamos a ir variando para encontrar un beneficio máximo son: nivel de producto 1, nivel de producto 2 y periodo de pedido. \\
 	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman un valor. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
 	encontrar una solción óptima. 
@@ -489,6 +627,11 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	independiente para cada producto, de forma que el nivel de producto 1 podria aumentar 3 unidades mientras que el nivel de producto 2 podria disminuir. 
 	Para hallar la periodicidad de pedido, que es el otro factor de decisión, en este caso utilizamos una distribución uniforme entre -1 y 1, ya que al tratarse de tiempo puede tomar valores continuos. \\
 	Hemos optado por un entorno relativamente pequeño para evitar saltos grandes entre las soluciones, ya que dificultaría la convergencia del algoritmo. 
+	
+	% - GRAFICAS Y COMENTARLAS --------------------------------------------------------------------------------
+	
+	
+	
 	\subsubsection{Implementación}
 	El proceso de recocido simulado genera $N$ iteraciones de la simulación, modificando algunos de los valores en cada iteración.\\
 	
@@ -518,18 +661,18 @@ def recocido_simulado(initial_state):
 	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno de los más utilizados \cite{tfm}, si bien es cierto que existen otros.
 
 	\begin{python}	
-	while current_temp>final_temp:
-		# Comprobar si el vecino es mejor
-		neighbor = get_neighbor(current_state)
-		neighbor["benef"] = get_benef(neighbor)
+while current_temp>final_temp:
+	# Comprobar si el vecino es mejor
+	neighbor = get_neighbor(current_state)
+	neighbor["benef"] = get_benef(neighbor)
 
-		benef_diff = neighbor["benef"] - current_state["benef"]
-		prob = math.exp(-abs(benef_diff) / current_temp)
-	
-		# Si es mejor, aceptamos vecino
-		# Si es peor, aceptamos si p>u
-		if benef_diff > 0 or random.uniform(0, 1) < prob:
-			current_state = neighbor
+	benef_diff = neighbor["benef"] - current_state["benef"]
+	prob = math.exp(-abs(benef_diff) / current_temp)
+
+	# Si es mejor, aceptamos vecino
+	# Si es peor, aceptamos si p>u
+	if benef_diff > 0 or random.uniform(0, 1) < prob:
+		current_state = neighbor
 	\end{python}	
 
 	Al entrar en el bucle, utilizamos el método \texttt{get\_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método \texttt{get\_benef}, obtenemos el beneficio que genera el vecino, y igualamos \texttt{prob} al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. 
