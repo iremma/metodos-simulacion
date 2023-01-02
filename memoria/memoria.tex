@@ -701,15 +701,16 @@ def get_neighbor(state):
 
 	\begin{python}
 	# Bajamos temperatura
-	if L>10:
-  		current_temp = current_temp * alpha
-  		L=0
-
+	if L==max_L:
+		current_temp = current_temp * alpha
+		L=0
+	
+	iteraciones += 1
+	L += 1
+	it_sin_cambio +=1 
+	
 	if best_state["benef"] < current_state["benef"]:
- 		best_state = current_state
-
-	iteraciones+=1
-	L+=1
+		best_state = current_state		it_sin_cambio = 0
 	\end{python}
 
 	Cuando se alcanza la temperatura mínima, el algoritmo se detiene y el método devuelve el \texttt{best\_state}.
