@@ -30,5 +30,5 @@ Persona 2: LUIS
 -Explicar elección de temp inicial y L con pruebas pilotos
 
 Persona 3: AÍDA
--Explicar las graficas obtenidad
+-Explicar las graficas obtenidas
 -Condición de parada  (Codigo + memoria)
