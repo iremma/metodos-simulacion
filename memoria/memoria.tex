@@ -155,9 +155,12 @@
 	A demás, los propios autores del paper original proporcionan el codigo en C para implementar el algoritmo localmente.
 
 	\subsubsection{Conclusiones}
-	Si bien es cierto que el método Wallace es el más rápido, presenta desventajas evidentes como la correlación. 
-	El método Ziggurat, que es más lento que el Wallace, no tiene problemas de correlación, pero si que falla en el test Crush con una colisión identificada en los tests de doble precisión. 
-	Además, utiliza un total de $388$ constantes, lo que puede ser problemático en algunos entornos. 
+	Si bien es cierto que el método Wallace es el más rápido, presenta desventajas evidentes como la correlación. \\
+ 
+	El método Ziggurat, que es más lento que el Wallace, no tiene problemas de correlación, pero si que falla en el test Crush con una colisión identificada en los tests de doble precisión. \\
+ 
+	Además, utiliza un total de $388$ constantes, lo que puede ser problemático en algunos entornos. \\
+ 
 	El método Monty Python es el tercero más rápido después del Wallace y el Ziggurat, y presenta ventajas evidentes, como los buenos resultados en los tests de aleatoriedad y correlación, así como el bajo número de operaciones y constantes necesarias. 
 	La mayor limitación del método Monty Python está en el uso de muestras cuya $n$ sea mayor que $2^{36}$. 
 	
@@ -179,13 +182,13 @@
 		\end{tabular}
 	\end{table}
 	
-	Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decir todos los viernes a primera hora realiza un pedido, tomando como referencia el nivel de inventario de los productos en ese. Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decir todos los viernes a primera hora realiza un pedido en el que tomando como referencia el nivel de inventario de los productos en ese momento, se solicitan las unidades necesarias para que el nivel del inventario de cada producto llegue a $1000$ y $1500$ unidades, respectivamente en cada producto.
+	Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decir todos los viernes a primera hora realiza un pedido, tomando como referencia el nivel de inventario de los productos en ese. Para satisfacer la demanda de sus clientes el dueño del almacén mantiene un stock de productos. La política de pedidos al distribuidor es periódica, es decir todos los viernes a primera hora realiza un pedido en el que tomando como referencia el nivel de inventario de los productos en ese momento, se solicitan las unidades necesarias para que el nivel del inventario de cada producto llegue a $1000$ y $1500$ unidades, respectivamente en cada producto.\\
 
-	Asociado a cada pedido que realizamos al proveedor existe un coste fijo (coste de preparación) de $100$ euros, independientemente de las unidades demandadas. Adicionalmente, el coste por unidad incluida en el pedido depende de la cantidad solicitada habiendo descuentos por cantidad. Si el número de unidades demandadas del primer producto es menor o igual a $600$ el precio es de $1$ euro la unidad, mientras que si se piden más de $600$ el precio desciende a $75$ céntimos. Para el segundo producto, si el número de unidades demandadas es menor que $800$ el precio es de $1.5$ euros la unidad, mientras que si se piden más de $800$ el precio desciende a $1.25$ euros.
+	Asociado a cada pedido que realizamos al proveedor existe un coste fijo (coste de preparación) de $100$ euros, independientemente de las unidades demandadas. Adicionalmente, el coste por unidad incluida en el pedido depende de la cantidad solicitada habiendo descuentos por cantidad. Si el número de unidades demandadas del primer producto es menor o igual a $600$ el precio es de $1$ euro la unidad, mientras que si se piden más de $600$ el precio desciende a $75$ céntimos. Para el segundo producto, si el número de unidades demandadas es menor que $800$ el precio es de $1.5$ euros la unidad, mientras que si se piden más de $800$ el precio desciende a $1.25$ euros.\\
 
-	El tiempo que tarda en ser servido el pedido por los proveedores (tiempo líder), sigue una distribución normal de media 48 horas y desviación típica $3.5$, pagándose en ese momento.
+	El tiempo que tarda en ser servido el pedido por los proveedores (tiempo líder), sigue una distribución normal de media 48 horas y desviación típica $3.5$, pagándose en ese momento.\\
 
-	Se ha llegado a un acuerdo con el proveedor de forma que, tomando como referencia las $48$ horas que tarda en media un pedido en ser servido, si el pedido llega con $3$ horas de retraso en la entrega del mismo se realiza un descuento del $0.03\%$ del valor del pedido, encareciéndose en la misma cantidad en el caso de que el pedido llegue con al menos $3$ horas de adelanto.
+	Se ha llegado a un acuerdo con el proveedor de forma que, tomando como referencia las $48$ horas que tarda en media un pedido en ser servido, si el pedido llega con $3$ horas de retraso en la entrega del mismo se realiza un descuento del $0.03\%$ del valor del pedido, encareciéndose en la misma cantidad en el caso de que el pedido llegue con al menos $3$ horas de adelanto.\\
 	
 	El dueño del almacén debe pagar $0.0002$ euros por unidad del producto y unidad de tiempo, asociado al almacenamiento físico de los productos (alquiler del local, refrigeración...). En el caso de que al llegar un cliente éste solicite una cantidad mayor que la que hay en inventario, se le sirve lo que queda, perdiendo la venta restante.
 	
@@ -201,12 +204,7 @@
 
 	\subsection{Modelado del problema}
 	El problema descrito se puede representar según el diagrama a continuación.
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\textwidth]{include/modelo_almacen.png}
-		\caption{Representación gráfica del modelado del problema}
-	\end{figure}
+
 
 	\begin{figure}[H]
 		\centering
@@ -214,11 +212,11 @@
 		\caption{Representación gráfica del modelado del problema}
 	\end{figure}
 	
-	El almacén guarda productos de dos tipos, siendo $x_1$ y $x_2$ la cantidad de cada uno de los productos almacenados en un instante. Los productos se guardan por separado, teniendo una cantidad máxima de cada producto en stock.
+	El almacén guarda productos de dos tipos, siendo $x_1$ y $x_2$ la cantidad de cada uno de los productos almacenados en un instante. Los productos se guardan por separado, teniendo una cantidad máxima de cada producto en stock.\\
 	
-	Una de las principales características de este problema es su política de pedidos. Cada $7$ días el propietario realiza un pedido al proveedor, independientemente del estado del almacén durante los días anteriores.
+	Una de las principales características de este problema es su política de pedidos. Cada $7$ días el propietario realiza un pedido al proveedor, independientemente del estado del almacén durante los días anteriores.\\
 	
-	La llegada de clientes al sistema sigue una distribución de Poission con $\lambda = 0.5$, mientras que la llegada de pedidos sigue una normal $N(48, 3.5)$.
+	La llegada de clientes al sistema sigue una distribución de Poission con $\lambda = 0.5$, mientras que la llegada de pedidos sigue una normal $N(48, 3.5)$.\\
 	
 	El coste total del sistema se calcula como las ganancias por las ventas de productos ($R$) menos los costes de almacenamiento ($H$) y costes de compra de productos al proveedor ($C$).
 	
@@ -234,7 +232,7 @@
 	Se simulará el comportamiento del sistema durante $5$ meses, teniendo inicialmente $70$ unidades de ambos productos en el almacén.
 	 	
 	\subsubsection{Implementación}
-	La implementación de esta simulación se realizó utilizando el lenguaje python, definiendo de manera separada las rutinas de llegada de un cliente, llegada de un pedido y compra de un pedido.
+	La implementación de esta simulación se realizó utilizando el lenguaje python, definiendo de manera separada las rutinas de llegada de un cliente, llegada de un pedido y compra de un pedido.\\
 	
 	Las variables utilizadas se definen como globales, permitiendo que la entrada de cada uno de los métodos sea únicamente el tiempo de simulación (\textit{ts}). No existen problemas de acceso concurrente a las variables, ya que todo el proceso de simulación sucede de manera lineal.
 	
@@ -245,7 +243,7 @@
 		Esta rutina se ejecuta con la llegada de un nuevo cliente al sistema. Se actualizan los costes de almacenamiento y el estado del almacén, así como los beneficios en caso de poder satisfacer las necesidades del cliente. 
 		Cabe resaltar que un cliente no se considera satisfecho si recibe el pedido deseado de uno de los productos, pero no del otro.
 		
-		En este método se genera también la llegada del siguiente cliente.
+		En este método se genera también la llegada del siguiente cliente.\\
 		
 		\begin{python}
 def rutina_llegada_cliente(ts):
@@ -293,7 +291,7 @@ def rutina_llegada_cliente(ts):
 	\item \textbf{Llegada de un pedido}. 
 	
 	Esta rutina se ejecuta con la llegada de un pedido que se compró en el pasado al sistema. Se actualizan los costes de almacenamiento, así como el nivel de inventario posterior a la recogida del pedido. Según el tiempo de llegada del pedido, se calcula el precio de la compra.
-	Hemos interpretado que $K$ es el coste fijo de preparar un lote de cada tipo de producto, por lo que se tiene en cuenta para cada uno de los dos tipos de producto producido por separado.
+	Hemos interpretado que $K$ es el coste fijo de preparar un lote de cada tipo de producto, por lo que se tiene en cuenta para cada uno de los dos tipos de producto producido por separado.\\
 	
 	\begin{python}
 def rutina_llegada_pedido(ts):
@@ -333,7 +331,7 @@ def rutina_llegada_pedido(ts):
 	
 	\item \textbf{Compra de un pedido}. 
 	
-	Esta rutina se ejecuta en la compra de un nuevo pedido para el almacén. De acuerdo con las indicaciones del enunciado, cada siete días se realiza una compra de la cantidad restante para completar el almacén de cada uno de los productos. 
+	Esta rutina se ejecuta en la compra de un nuevo pedido para el almacén. De acuerdo con las indicaciones del enunciado, cada siete días se realiza una compra de la cantidad restante para completar el almacén de cada uno de los productos. \\
 	
 	\begin{python}
 def rutina_compra_pedido(ts):
@@ -483,7 +481,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	
 	\subsubsection{Ajuste de los hiperparámetros}
 	
-	\paragraph{Temperatura inicial y alfa}.\\
+	\paragraph{Temperatura inicial}.\\
 	La temperatura inicial que se escoja para la ejecución del algoritmo de recocido simulado presenta una vital importancia para el correcto funcionamiento de esta metaheurística y para la obtención del máximo global buscado.\\
 
 	\begin{figure}[H]
@@ -540,7 +538,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 			\includegraphics[width=\textwidth]{include/L1/temperatura.png}
 			\caption{Temperatura}
 		\end{subfigure}
-		\caption{Pruebas para L=1. Mejor solución: Periodicidad: 177.62, nivel_1: 977, nivel_2: 1519, \textbf{beneficio}: 60806.31. Tiempo de ejecución 3 min 9 s }
+		\caption{Pruebas para L=1. Mejor solución: Periodicidad: 177.62, nivel\_1: 977, nivel\_2: 1519, \textbf{beneficio}: 60806.31. Tiempo de ejecución 3 min 9 s }
 	\end{figure}
 
 	\begin{figure}[H]
@@ -568,7 +566,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 			\includegraphics[width=\textwidth]{include/L2/temperatura.png}
 			\caption{Temperatura}
 		\end{subfigure}
-		\caption{Pruebas para L=2. Mejor solución: Periodicidad: 170.27, nivel_1: 997,  nivel_2: 1515, \textbf{beneficio}: 61697.25. Tiempo de ejecución 6 min 17 s}
+		\caption{Pruebas para L=2. Mejor solución: Periodicidad: 170.27, nivel\_1: 997,  nivel\_2: 1515, \textbf{beneficio}: 61697.25. Tiempo de ejecución 6 min 17 s}
 	\end{figure}
 
 	
@@ -597,7 +595,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 			\includegraphics[width=\textwidth]{include/L5/temperatura.png}
 			\caption{Temperatura}
 		\end{subfigure}
-		\caption{Pruebas para L=5. Mejor solución: Periodicidad: 171.26, nivel_1: 982,  nivel_2: 1449,\textbf{beneficio}: 61784.29. Tiempo de ejecución 15 min 39 s}
+		\caption{Pruebas para L=5. Mejor solución: Periodicidad: 171.26, nivel\_1: 982,  nivel\_2: 1449,\textbf{beneficio}: 61784.29. Tiempo de ejecución 15 min 39 s}
 	\end{figure}
 
 	\begin{figure}[H]
@@ -625,7 +623,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 			\includegraphics[width=\textwidth]{include/L10/temperatura.png}
 			\caption{Temperatura}
 		\end{subfigure}
-		\caption{Pruebas para L=10. Periodicidad: 161.69, nivel_1: 938,  nivel_2: 1530, \textbf{beneficio}: 62001.13. Tiempo de ejecución 31 min 31 s}
+		\caption{Pruebas para L=10. Periodicidad: 161.69, nivel\_1: 938,  nivel\_2: 1530, \textbf{beneficio}: 62001.13. Tiempo de ejecución 31 min 31 s}
 	\end{figure}
 
 
@@ -642,10 +640,10 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	En primer lugar, se usó un valor de $50$, con el que la temperatura no bajó de $5000$ y la solución apenas mejoró, obteniendo un beneficio de $61414.08$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $172.78$ días y un nivel máximo de producto $1031$ y $1508$ respectivamente.
 	%{'periodicidad': 172.77635806601137, 'nivel_1': 1031, 'nivel_2': 1508, 'benef': 61414.08057727425}
 	
-	Para intentar mejorar los resultados, se aumentó a un valor de $100$, con el que la temperatura aún no bajó de $4000$. En este caso se obtuvo un beneficio de $61537.94$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $161.65$ días y un nivel máximo de producto $1005$ y $1480$ respectivamente.
+	Para intentar mejorar los resultados, se aumentó a un valor de $100$, con el que la temperatura aún no bajó de $4000$. En este caso se obtuvo un beneficio de $61537.94$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $161.65$ días y un nivel máximo de producto $1005$ y $1480$ respectivamente.\\
 	%{'periodicidad': 161.65371542849738, 'nivel_1': 1005, 'nivel_2': 1480, 'benef': 61537.93718629534}
 	
-	Como el valor aún no era suficientemente alto como para que la temperatura bajase a valores cercanos a cero, se usó un valor de $300$. En este caso, la temperatura decrece hasta valores muy cercanos a $0$, y en la gráfica de la solución evaluada se observa la evolución esperada, pasando de una gran variabilidad a una solución óptima más estable. Para esta ejecución se obtuvo un beneficio de $61985.74$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $170.90$ días y un nivel máximo de producto $938$ y $1467$ respectivamente.
+	Como el valor aún no era suficientemente alto como para que la temperatura bajase a valores cercanos a cero, se usó un valor de $300$. En este caso, la temperatura decrece hasta valores muy cercanos a $0$, y en la gráfica de la solución evaluada se observa la evolución esperada, pasando de una gran variabilidad a una solución óptima más estable. Para esta ejecución se obtuvo un beneficio de $61985.74$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $170.90$ días y un nivel máximo de producto $938$ y $1467$ respectivamente.\\
 	%{'periodicidad': 170.89754956500875, 'nivel_1': 938, 'nivel_2': 1467, 'benef': 61985.738664631484}
 	
 	La última ejecución piloto usó un valor de $200$, intentando disminuir el tiempo de ejecución manteniendo la calidad de los resultados obtenidos con la ejecución anterior. En este caso, la simulación no llegó a lograr una temperatura suficientemente baja como para lograr un estado en el que los movimientos a estados cercanos sean muy limitados, generando una gráfica de la función fitness diferente a la esperada con esta metaheurística. Se obtuvo un beneficio de $61142.38$\euro \hspace{1mm} al realizar los pedidos con una periodicidad de $169.96$ días y un nivel máximo de producto $993$ y $1523$ respectivamente.\\
@@ -773,9 +771,9 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	
 	
 	Como se ha definido previamente, los tres factores de decisión que vamos a ir variando para encontrar un beneficio máximo son: nivel de producto 1, nivel de producto 2 y periodo de pedido. \\
-	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman un valor. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
+	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman el valor inicial propuesto para la simulación. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
 	encontrar una solción óptima. 
-	Para encontrar los niveles de producto de las soluciones vecinas, hemos definido un entorno tamano 3, de forma que se van a restar o sumar entre 3 y 0 unidades de producto al estado actual. Se utilizará una función 
+	Para encontrar los niveles de producto de las soluciones vecinas, hemos definido un entorno tamaño 3, de forma que se van a restar o sumar entre 3 y 0 unidades de producto al estado actual. Se utilizará una función 
 	independiente para cada producto, de forma que el nivel de producto 1 podria aumentar 3 unidades mientras que el nivel de producto 2 podria disminuir. 
 	Para hallar la periodicidad de pedido, que es el otro factor de decisión, en este caso utilizamos una distribución uniforme entre -1 y 1, ya que al tratarse de tiempo puede tomar valores continuos. \\
 	Hemos optado por un entorno relativamente pequeño para evitar saltos grandes entre las soluciones, ya que dificultaría la convergencia del algoritmo. 
@@ -783,7 +781,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	\subsubsection{Implementación}
 	El proceso de recocido simulado genera $N$ iteraciones de la simulación, modificando algunos de los valores en cada iteración.\\
 	
-	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido} \texttt{\_simulado}, que toma como parámetro un estado inicial, con las variables de  	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, $\alpha$, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. 
+	Para implementar en python el recocido simulado, hemos definido el método \texttt{recocido} \texttt{\_simulado}, que toma como parámetro un estado inicial, con las variables de  	decisión inicializadas. A continuación, se inicializan las variables L, Temperatura Inicial, Temperatura final, $\alpha$, Temperatura Final, el contador de iteraciones totales y el contador de pasos para cambiar la temperatura. \\
 
 	\begin{python}
 def recocido_simulado(initial_state):
@@ -796,7 +794,7 @@ def recocido_simulado(initial_state):
 
 	En la primera iteracion, damos a la variable \texttt{current\_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
 	Generamos los beneficios utilizando el método \texttt{get\_benef}, que ejecuta la simulación desarrollada en el primer apartado, y los guardamos en la clave
-	"benef" del current\_state. Igualamos la variable \texttt{best\_state} al current\_state.
+	"benef" del current\_state. Igualamos la variable \texttt{best\_state} al current\_state.\\
 
 	\begin{python}
 	# Primera iteracion
@@ -806,7 +804,7 @@ def recocido_simulado(initial_state):
 	best_state = current_state
 	\end{python}			
 
-	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno de los más utilizados \cite{tfm}, si bien es cierto que existen otros.
+	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno de los más utilizados \cite{tfm}, si bien es cierto que existen otros.\\
 
 	\begin{python}	
 while current_temp>final_temp:
@@ -823,11 +821,11 @@ while current_temp>final_temp:
 		current_state = neighbor
 	\end{python}	
 
-	Al entrar en el bucle, utilizamos el método \texttt{get\_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método \texttt{get\_benef}, obtenemos el beneficio que genera el vecino, y igualamos \texttt{prob} al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. 
+	Al entrar en el bucle, utilizamos el método \texttt{get\_neighbors} para obtener una solucion del entorno del estado actual, y de nuevo utilizando el método \texttt{get\_benef}, obtenemos el beneficio que genera el vecino, y igualamos \texttt{prob} al valor de la probabilidad siguiendo la distribución de Boltzmann para la temperatura actual. \\
 	
 	Si la solución es mejor, la variable \texttt{current\_state} pasa a ser el estado del vecino.
 	Si la solución es peor, generamos una probabilidad aleatoria utilizando el generador \texttt{random.uniform}. Si su valor es mayor que la probabilidad inicializada previamente,
-	nos quedamos con el \texttt{current\_state} actual. Si es menor, actualizamos current\_state al valor del vecino.
+	nos quedamos con el \texttt{current\_state} actual. Si es menor, actualizamos current\_state al valor del vecino.\\
 
 	\begin{python}	
 def get_benef(state):
@@ -849,7 +847,7 @@ def get_neighbor(state):
 
 	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
 	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best\_state} es peor que la del estado actual, actualizamos \texttt{best\_state}.
-	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.
+	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
 
 	\begin{python}
 	# Bajamos temperatura
@@ -878,21 +876,20 @@ def get_neighbor(state):
 		\item La distancia de las soluciones exploradas es $1$ para la periodicidad y $3$ para el nivel de inventario.
 		\item El criterio de parada son $300$ iteraciones sin cambios.
 	\end{itemize}
-	Para estos hiperparámetros, hemos conseguido un beneficio de $62\hspace{1mm}006.913€$, siendo $x€$ unidades mayor que el del estado inicial. 
+	Para estos hiperparámetros, hemos conseguido un beneficio de $62\hspace{1mm}006.913€$, siendo $x€$ unidades mayor que el del estado inicial. \\
 	%{'periodicidad': 165.629957928881, 'nivel_1': 1070, 'nivel_2': 1470, 'benef': 62006.91302597619}
 	
-	Cabe destacar que, al inspeccionar los \textit{logs} que hemos impreso, el mínimo global se alcanza $150$ iteraciones antes del final. Hemos probado a optimizar este resultado alterando el valor de $L$ y la temperatura final, pero ninguna de las dos modificaciones ha dado resultados satisfactorios. 
+	Cabe destacar que, al inspeccionar los \textit{logs} que hemos impreso, el mínimo global se alcanza $150$ iteraciones antes del final. Hemos probado a optimizar este resultado alterando el valor de $L$ y la temperatura final, pero ninguna de las dos modificaciones ha dado resultados satisfactorios. \\
 	
-	También hemos probado a cambiar la distribución que usamos para obtener vecinos del entorno. Para elegir los vecinos, hemos optado por una normal de radio $1$, ya que al probar con distribuciones uniformes y mayor radio, el algoritmo se quedaba atrapado en mínimos locales.
 	
 	
 	% - GRAFICAS Y COMENTARLAS --------------------------------------------------------------------------------
 	
-	Tras la optimización de la simulación mediante el recocido simulado obtenemos las gráficas de rendimiento de la Figura \ref{result-graphs}, que representan la evolución de los valores de diferentes parámetros y funciones durante la simulación.
+	Tras la optimización de la simulación mediante el recocido simulado obtenemos las gráficas de rendimiento de la Figura \ref{result-graphs}, que representan la evolución de los valores de diferentes parámetros y funciones durante la simulación.\\
 		
-	En ellas se puede observar como afecta el descenso de la temperatura a la probabilidad de moverse a soluciones peores, ya que con mayor temperatura, mayor es la probabilidad de moverse a un estado peor y con temperatura más cercanas a cero, esa probabilidad es prácticamente nula.
+	En ellas se puede observar como afecta el descenso de la temperatura a la probabilidad de moverse a soluciones peores, ya que con mayor temperatura, mayor es la probabilidad de moverse a un estado peor y con temperatura más cercanas a cero, esa probabilidad es prácticamente nula.\\
 	
-	También se observa esta evolución en las gráficas de la función $f$ y $f*$, donde vemos que en las primeras iteraciones, la solución evaluada es más variable mientras que en las últimas iteraciones ambas gráficas se asemejan.
+	También se observa esta evolución en las gráficas de la función $f$ y $f*$, donde vemos que en las primeras iteraciones, la solución evaluada es más variable mientras que en las últimas iteraciones ambas gráficas se asemejan.\\
 	
 	Es también interesante señalar la variación de los factores de evolución, que varían de manera inversamente proporcional entre sí, ya que en general, al aumentar el valor de uno, disminuye el del otro.
 	
