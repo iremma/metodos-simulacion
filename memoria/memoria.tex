@@ -28,7 +28,6 @@
 	\setlength{\voffset}{-2cm}
 	\setlength{\hoffset}{-2cm}
 	
-	
 	\input{./include/portada.tex}
 	
 	\tableofcontents
@@ -788,11 +787,15 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	\begin{python}
 def recocido_simulado(initial_state):
 	
-	initial_temp = 7500
-	max_L = 10 #Num de iteraciones donde mantenemos la temperatura
+	# HIPERPARAMETERS
 	alpha = 0.95 #Ritmo de decrecimiento de la temperatura
-	iteraciones = 1 #Contador de iteraciones
+	initial_temp = 7500
+	max_it_sin_cambio = 300
+	max_L = 10
+	
+	it_sin_cambio = 0 # Contador de iteraciones sin cambio
 	L = 0 #Contador del paso
+	iteraciones = 1 #Contador de iteraciones
 	\end{python}
 
 	En la primera iteracion, damos a la variable \texttt{current\_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
@@ -810,7 +813,7 @@ def recocido_simulado(initial_state):
 	Una vez finalizada esta primera iteración, entramos en un bucle que terminará cuando la temperatura alcance el valor mínimo. Este criterio de parada es uno de los más utilizados \cite{tfm}, si bien es cierto que existen otros.\\
 
 	\begin{python}	
-while current_temp>final_temp:
+while it_sin_cambio < max_it_sin_cambio:
 	# Comprobar si el vecino es mejor
 	neighbor = get_neighbor(current_state)
 	neighbor["benef"] = get_benef(neighbor)
