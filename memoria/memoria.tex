@@ -404,32 +404,32 @@ con unas alturas variables pero muy cercanas.
 
 	\begin{itemize}
 		\item Durante el tiempo de simulación el total de ingresos recibidos gracias a las compras de
-	los clientes es de $99\hspace{1mm}460$ euros.
+	los clientes es de $93\hspace{1mm}720$ euros.
 
-		\item En total se han realizado $21$ pedidos que suman un gasto de $40\hspace{1mm}315.34$ euros.
+		\item En total se han realizado $21$ pedidos que suman un gasto de $39\hspace{1mm}026.20$ euros.
 
-		\item El coste de almacenamiento de los productos ha sido de $864.34$ euros.
+		\item El coste de almacenamiento de los productos ha sido de $904.03$ euros.
 	\end{itemize}
 
 	Para calcular el beneficio obtenido basta con restar a los ingresos los gastos de pedido y los gastos
 de almacenamiento:
 
-	$$beneficio = 99\hspace{1mm}460 - 40\hspace{1mm}315.34 - 864.34 = 58\hspace{1mm}280.32$$
+	$$beneficio = 93\hspace{1mm}720 - 39\hspace{1mm}026.20 - 904.03 = 53\hspace{1mm}789.76$$
 	
 	
 	Partiendo de un nivel de inventario de $70$ unidades de cada tipo de producto, y con la política de
 pedidos descrita en el enunciado, la proporción de tiempo que el almacén está completamente
-vacío es de un $5.33\%$ del tiempo, lo que en horas equivale a $191.3$ horas.
+vacío es de un $5.25\%$ del tiempo, lo que en horas equivale a $189$ horas.
 
 	
 	En $3\hspace{1mm}600$ horas han llegado un total de $7\hspace{1mm}298$ clientes de los cuales:
 	
 	\begin{itemize}
-		\item $6\hspace{1mm}941$ clientes su demanda ha sido completamente satisfecha.
-		\item $357$ clientes su demanda no ha sido satisfecha.
+		\item $6\hspace{1mm}497$ clientes su demanda ha sido completamente satisfecha.
+		\item $400$ clientes su demanda no ha sido satisfecha.
 	\end{itemize}
 
-	Eso supone que la demanda de un $95.11\%$ de los clientes que llegaron a la tienda en este periodo
+	Eso supone que la demanda de un $94.20\%$ de los clientes que llegaron a la tienda en este periodo
 
 	de $5$ meses fue totalmente satisfecha.
 	
@@ -444,7 +444,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 		\includegraphics[width=0.75\textwidth]{include/simulacion_5d.png}
 	\end{figure}
 	
-	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $16$ 	horas se agotaron las unidades del producto $2$ y a las $22$ horas de simulación ya se habían acabado las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
+	Como se observa, partiendo únicamente con $70$ unidades de cada producto, alrededor de las $22$ 	horas se agotaron las unidades del producto $2$ y a las $24$ horas de simulación ya se habían acabado las existencias de ambos productos quedando completamente vacío el inventario, teniendo que	esperar a que se realizara el pedido y a que este llegara.
 
 	\subsection{Simulación del problema con metaheurísticas. Identificación de política de pedidos óptima.}
 	
@@ -483,9 +483,156 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	\subsubsection{Ajuste de los hiperparámetros}
 	
 	\paragraph{Temperatura inicial y alfa}.\\
+	La temperatura inicial que se escoja para la ejecución del algoritmo de recocido simulado presenta una vital importancia para el correcto funcionamiento de esta metaheurística y para la obtención del máximo global buscado.\\
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.75\textwidth]{include/Temperaturas/grafico1.png}
+	\end{figure}
+
+	Lo ideal a la hora de elegir la temperatura inicial es escoger aquella que inicialmente proporcione una probabilidad inicial de escoger una solución peor cercana a 0.9. Por ello para explorar el espacio de probabilidades se ha implementado una función que ejecuta la simulación diseñada y calcula la probabilidad con los distintos valores de la temperatura. 
+
+	En la gráfica podemos observar como varía la probabilidad inicial con el cambio de temperatura inicial. Se trata de una probabilidad que fluctúa mucho ya que esta depende de muchos elecciones aleatorias realizadas tanto en la simulación como en la elección de la solución vecina en el entorno de la solución inicial. Aun siendo muy variable se observa como hay una tendencia creciente que se estabiliza ligeramente cuando llegamos hacia el rango de temperatura entre 7000 y 8000. Es por ello por lo que decidimos volver a ejecutar la búsqueda de la temperatura inicial pero en ese rango para observarlo más de cerca:
 	
-	\paragraph{L}.\\
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.75\textwidth]{include/Temperaturas/grafico2.png}
 	
+	\end{figure}
+	Como se observa, aunque las fluctuaciones están un poco más acotadas para estos valores de temperatura, siguen variando bastante, pero hemos podido observar que la franja de temperatura señalada con el recuadro naranja en la anterior gráfica parece un poco más estable y estar en torno a 0.9 de probabilidad.  Por ello se ha escogido el valor de 7500 como temperatura inicial para la ejecución del recocido simulado.\\
+
+	De todas maneras, cabe destacar la dificultad de la correcta elección de la temperatura, se comprobará de manera empírica si efectivamente esta temperatura es adecuada o no para la búsqueda del óptimo global.
+
+	\paragraph{Parámetro L}.\\
+	El parámetro L establecerá el número de iteraciones en las que cada temperatura se mantendrá sin variar. Es importante también elegir valor adecuado ya que si escogemos una L muy baja no daremos tiempo al algoritmo para que pueda explorar soluciones peores.\\
+
+	Para explorar las posibilidades, hemos decidido realizar unas pruebas piloto con distintos valores de L y observar la evolución de las soluciones para cada caso. De esta manera podemos ver cual de los valores de L probados es el óptimo, es decir, que no sea muy pequeño y permitir a cada una de las temperaturas quedarse estable el suficiente tiempo como para que explore soluciones peores, pero no sea muy grande para no hacerlo tan ineficiente explorando de manera que no se llega a una solución mejor.\\
+
+	Para estas simulaciones piloto todavía no hemos definido el criterio de parada adecuado, eso se explicará en los siguientes apartados. Para este apartado el criterio de parada que se establece es que el algoritmo para cuando la temperatura llega a un valor de 1, de tal manera que viésemos todo el recorrido del recocido simulado.\\
+
+	Los valores de L con los que hemos hecho pruebas piloto han sido 1, 2, 5 y 10. A continuación se muestran algunos de los resultados más representativos obtenidos tras múltiples pruebas con cada uno de ellos.\\
+
+	
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L1/fitness.png}
+			\caption{Fitness}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L1/mejor_solucion.png}
+			\caption{Mejor solución}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L1/probabilidades.png}
+			\caption{probabilidad}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L1/temperatura.png}
+			\caption{Temperatura}
+		\end{subfigure}
+		\caption{Pruebas para L=1. Mejor solución: Periodicidad: 177.62, nivel_1: 977, nivel_2: 1519, \textbf{beneficio}: 60806.31. Tiempo de ejecución 3 min 9 s }
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L2/fitness.png}
+			\caption{Fitness}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L2/mejor_solucion.png}
+			\caption{Mejor solución}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L2/probabilidades.png}
+			\caption{probabilidad}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L2/temperatura.png}
+			\caption{Temperatura}
+		\end{subfigure}
+		\caption{Pruebas para L=2. Mejor solución: Periodicidad: 170.27, nivel_1: 997,  nivel_2: 1515, \textbf{beneficio}: 61697.25. Tiempo de ejecución 6 min 17 s}
+	\end{figure}
+
+	
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L5/fitness.png}
+			\caption{Fitness}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L5/mejor_solucion.png}
+			\caption{Mejor solución}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L5/probabilidades.png}
+			\caption{probabilidad}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L5/temperatura.png}
+			\caption{Temperatura}
+		\end{subfigure}
+		\caption{Pruebas para L=5. Mejor solución: Periodicidad: 171.26, nivel_1: 982,  nivel_2: 1449,\textbf{beneficio}: 61784.29. Tiempo de ejecución 15 min 39 s}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L10/fitness.png}
+			\caption{Fitness}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L10/mejor_solucion.png}
+			\caption{Mejor solución}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L10/probabilidades.png}
+			\caption{probabilidad}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.24\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{include/L10/temperatura.png}
+			\caption{Temperatura}
+		\end{subfigure}
+		\caption{Pruebas para L=10. Periodicidad: 161.69, nivel_1: 938,  nivel_2: 1530, \textbf{beneficio}: 62001.13. Tiempo de ejecución 31 min 31 s}
+	\end{figure}
+
+
+	
+	Como se puede observar, el comportamiento del recocido simulado es similar para todos los valores de L, pero lo que cambia al fin y al cabo es el número de iteraciones que permanecemos en cada temperatura. La diferencia de las mejores soluciones encontradas en cada caso no es muy grande pero si que cabe destacar que para L=10 gracias a que permanece un gran número de iteraciones explorando soluciones peores debido a las altas temperaturas, finalmente consigue llegar a un resultado mayor no visto en las pruebas con Ls más pequeñas.\\
+
+	Como ya se ha mencionado con la temperatura, al tratarse de la optimización de una simulación que tiene una componente aleatoria bastante grande y que puede variar mucho de una ejecución a otra, la elección de L puede ser importante para asegurar que se le da bastantes oportunidades al algoritmo de encontrar soluciones y realizar así bastantes iteraciones. A la vista de los resultados hemos podido comprobar que las pruebas realizadas con una L grande exploraban muchas soluciones y en muchas de las ejecuciones realizadas se alcanzaba un resultado mejor que para L pequeña. Una L pequeña también puede alcanzar un buen resultado, pero debido aque la temperatura alcanza valores bajos de manera más rápida puede variar mucho de una ejecución del recocido a otra y en muchas de estas ejecuciones no alcanzaba un buen resultado, como se ve por ejemplo en L=1 que se queda en el máximo de 60806 euros de beneficio.
+
 	\paragraph{Criterio de parada}.\\
 	El criterio utilizado en este recocido simulado como condición de parada es haber alcanzado un número $x$ de iteraciones sin cambios, es decir, que tras $x$ iteraciones seguidas en las que no se ha mejorado la función objetivo, en este caso los beneficios, la simulación debe parar.\\
 		
