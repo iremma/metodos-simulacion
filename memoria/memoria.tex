@@ -480,6 +480,17 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	El problema que buscamos resolver en esta práctica con este algoritmo es encontrar el valor de periodicidad con el que se deben realizar los pedidos, así como la cantidad que se debe pedir de cada uno de los productos para maximizar el beneficio.
 	
 	\subsubsection{Ajuste de los hiperparámetros}
+
+	\paragraph{Entorno de vecindad}.\\	
+	
+	
+	Como se ha definido previamente, los tres factores de decisión que vamos a ir variando para encontrar un beneficio máximo son: nivel de producto 1, nivel de producto 2 y periodo de pedido. \\
+	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman el valor inicial propuesto para la simulación. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
+	encontrar una solción óptima. 
+	Para encontrar los niveles de producto de las soluciones vecinas, hemos definido un entorno tamaño 3, de forma que se van a restar o sumar entre 3 y 0 unidades de producto al estado actual. Se utilizará una función 
+	independiente para cada producto, de forma que el nivel de producto 1 podria aumentar 3 unidades mientras que el nivel de producto 2 podria disminuir. 
+	Para hallar la periodicidad de pedido, que es el otro factor de decisión, en este caso utilizamos una distribución uniforme entre -1 y 1, ya que al tratarse de tiempo puede tomar valores continuos. \\
+	Hemos optado por un entorno relativamente pequeño para evitar saltos grandes entre las soluciones, ya que dificultaría la convergencia del algoritmo. 
 	
 	\paragraph{Temperatura inicial}.\\
 	La temperatura inicial que se escoja para la ejecución del algoritmo de recocido simulado presenta una vital importancia para el correcto funcionamiento de esta metaheurística y para la obtención del máximo global buscado.\\
@@ -767,16 +778,7 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	
 	Con los resultados de estas pruebas piloto se decide fijar el número de iteraciones sin cambio necesarias para que el algoritmo considere haber alcanzado un óptimo global $300$.
 	
-	\paragraph{Entorno de vecindad}.\\	
 	
-	
-	Como se ha definido previamente, los tres factores de decisión que vamos a ir variando para encontrar un beneficio máximo son: nivel de producto 1, nivel de producto 2 y periodo de pedido. \\
-	Nuestra implementacion comenzará con un estado inicial donde estos tres parametros toman el valor inicial propuesto para la simulación. Estos valores irán cambiando segun nos movamos a soluciones vecinas, con el último objetivo de 
-	encontrar una solción óptima. 
-	Para encontrar los niveles de producto de las soluciones vecinas, hemos definido un entorno tamaño 3, de forma que se van a restar o sumar entre 3 y 0 unidades de producto al estado actual. Se utilizará una función 
-	independiente para cada producto, de forma que el nivel de producto 1 podria aumentar 3 unidades mientras que el nivel de producto 2 podria disminuir. 
-	Para hallar la periodicidad de pedido, que es el otro factor de decisión, en este caso utilizamos una distribución uniforme entre -1 y 1, ya que al tratarse de tiempo puede tomar valores continuos. \\
-	Hemos optado por un entorno relativamente pequeño para evitar saltos grandes entre las soluciones, ya que dificultaría la convergencia del algoritmo. 
 	
 	\subsubsection{Implementación}
 	El proceso de recocido simulado genera $N$ iteraciones de la simulación, modificando algunos de los valores en cada iteración.\\
@@ -785,11 +787,12 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 
 	\begin{python}
 def recocido_simulado(initial_state):
-	L = 0 #Num de iteraciones donde mantenemos la temperatura
-	initial_temp = 10000 
-	final_temp =.1
+	
+	initial_temp = 7500
+	max_L = 10 #Num de iteraciones donde mantenemos la temperatura
 	alpha = 0.95 #Ritmo de decrecimiento de la temperatura
 	iteraciones = 1 #Contador de iteraciones
+	L = 0 #Contador del paso
 	\end{python}
 
 	En la primera iteracion, damos a la variable \texttt{current\_state}, que va a ir guardando el estado donde nos encontramos, el valor del estado inicial.
@@ -845,7 +848,7 @@ def get_neighbor(state):
 	return neighbor
 	\end{python}		
 
-	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, entonces
+	Dentro del mismo bucle, una vez se ha hecho el cambio de estado, se pasan por dos condicionales. En primer lugar, si el contador de pasos ha llegado al valor L, que recordamos es 10, entonces
 	actualizamos la temperatura. En segundo lugar, si la solución almacenada en \texttt{best\_state} es peor que la del estado actual, actualizamos \texttt{best\_state}.
 	Esta modificación la hemos añadido para evitar que el algoritmo haya pasado en las primeras iteraciones por el mínimo global, y al rectificar haya terminado en un mínimo local.\\
 
