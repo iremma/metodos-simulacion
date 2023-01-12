@@ -493,13 +493,13 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 	
 	\paragraph{Temperatura inicial}.\\
 	La temperatura inicial que se escoja para la ejecución del algoritmo de recocido simulado presenta una vital importancia para el correcto funcionamiento de esta metaheurística y para la obtención del máximo global buscado.\\
+	
+	Lo ideal a la hora de elegir la temperatura inicial es escoger aquella que inicialmente proporcione una probabilidad inicial de escoger una solución peor cercana a 0.9. Por ello para explorar el espacio de probabilidades se ha implementado una función que ejecuta la simulación diseñada y calcula la probabilidad con los distintos valores de la temperatura.
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.75\textwidth]{include/Temperaturas/grafico1.png}
 	\end{figure}
-
-	Lo ideal a la hora de elegir la temperatura inicial es escoger aquella que inicialmente proporcione una probabilidad inicial de escoger una solución peor cercana a 0.9. Por ello para explorar el espacio de probabilidades se ha implementado una función que ejecuta la simulación diseñada y calcula la probabilidad con los distintos valores de la temperatura. 
 
 	En la gráfica podemos observar como varía la probabilidad inicial con el cambio de temperatura inicial. Se trata de una probabilidad que fluctúa mucho ya que esta depende de muchos elecciones aleatorias realizadas tanto en la simulación como en la elección de la solución vecina en el entorno de la solución inicial. Aun siendo muy variable se observa como hay una tendencia creciente que se estabiliza ligeramente cuando llegamos hacia el rango de temperatura entre 7000 y 8000. Es por ello por lo que decidimos volver a ejecutar la búsqueda de la temperatura inicial pero en ese rango para observarlo más de cerca:
 	
@@ -521,7 +521,6 @@ productos está a $0$ sin poder satisfacerse la demanda de los clientes que lleg
 
 	Los valores de L con los que hemos hecho pruebas piloto han sido 1, 2, 5 y 10. A continuación se muestran algunos de los resultados más representativos obtenidos tras múltiples pruebas con cada uno de ellos.\\
 
-	
 	
 	\begin{figure}[H]
 		\centering
